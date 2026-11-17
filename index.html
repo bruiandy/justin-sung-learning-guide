@@ -1,0 +1,2418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>Dr. Justin Sung 学习科学知识策展 — 非线性认知画布与反认知外包实验室</title>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: warm paper + crisp cards */
+      --background: #F7F6F2;
+      --surface-container-low: #FFFFFF;
+      --surface-container: #EFECE4;
+      --surface-container-high: #E5E1D6;
+
+      /* Ink */
+      --on-surface: #18181B;
+      --on-surface-variant: #52525B;
+
+      /* Rules */
+      --outline: #18181B;
+      --outline-variant: #D8D4C8;
+
+      /* Accents */
+      --primary: #1E3A8A;
+      --on-primary: #FFFFFF;
+      --primary-soft: #E0E7FF;
+      --primary-container: #D97706;
+      --on-primary-container: #18181B;
+      --secondary: #0F766E;
+      --on-secondary: #FFFFFF;
+      --secondary-soft: #CCFBF1;
+      --tertiary: #92400E;
+      --load-accent: #D97706;
+      --load-soft: #FEF3C7;
+      --error: #DC2626;
+      --trap-text: #B91C1C;
+      --trap-soft: #FEE2E2;
+      --on-error: #FFFFFF;
+
+      /* Semantic */
+      --positive: #0F766E;
+      --warning: #D97706;
+      --focus: #1E3A8A;
+
+      /* Data series */
+      --data-1: #1E3A8A;
+      --data-2: #0F766E;
+      --data-3: #D97706;
+      --data-4: #DC2626;
+      --data-context: #C4BFB2;
+
+      /* Fonts */
+      --font-headline: 'Noto Serif SC', 'Source Serif 4', serif;
+      --font-body: 'Noto Sans SC', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Geist Mono', 'Noto Sans SC', monospace;
+
+      /* Shape & Briefing rules */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --badge-radius: 2px;
+      --heading-tracking: -0.015em;
+      --label-tracking: 0.06em;
+
+      /* Type scale */
+      --display-size: clamp(2rem, 1.3rem + 2.8vw, 3.25rem);
+      --headline-size: clamp(1.45rem, 1.15rem + 1.3vw, 2.05rem);
+      --subhead-size: clamp(1.125rem, 1.02rem + 0.45vw, 1.35rem);
+      --body-size: clamp(1rem, 0.96rem + 0.16vw, 1.0625rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 5.5rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-2xl);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2.5px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Briefing Dossier Header & Section Bar */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--load-soft);
+      color: var(--on-primary-container);
+      border: 1px solid var(--load-accent);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      letter-spacing: var(--label-tracking);
+      text-transform: uppercase;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .dossier-pill--primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .dossier-pill--secondary {
+      background: var(--secondary);
+      color: var(--on-secondary);
+      border-color: var(--secondary);
+    }
+    .dossier-pill--trap {
+      background: var(--trap-soft);
+      color: var(--trap-text);
+      border-color: var(--error);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      letter-spacing: var(--label-tracking);
+      text-transform: uppercase;
+    }
+
+    /* Typography */
+    .title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 700;
+      letter-spacing: var(--heading-tracking);
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      letter-spacing: var(--heading-tracking);
+      line-height: 1.2;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-xs) 0;
+    }
+    .subhead {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-size: var(--subhead-size);
+      font-weight: 500;
+      color: var(--secondary);
+      margin: var(--space-sm) 0 0 0;
+      max-width: 65ch;
+      line-height: 1.5;
+    }
+    .prose {
+      max-width: 65ch;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .prose-muted {
+      max-width: 65ch;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+    .index-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--primary);
+      background: var(--primary-soft);
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--badge-radius);
+      display: inline-block;
+    }
+
+    /* Quick Jump Nav Bar */
+    .nav-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-xs);
+      margin-top: var(--space-lg);
+      padding: var(--space-sm);
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      border-bottom: var(--card-border);
+    }
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .nav-link:hover {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    /* Hero Stats & Diagnostic Entry */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: var(--space-xl);
+      margin-top: var(--space-lg);
+      align-items: start;
+    }
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .figure-card--accent-top {
+      border-top: 3px solid var(--primary);
+    }
+    .figure-card--teal-top {
+      border-top: 3px solid var(--secondary);
+    }
+    .figure-card--load-top {
+      border-top: 3px solid var(--load-accent);
+    }
+    .figure-card--trap-top {
+      border-top: 3px solid var(--error);
+    }
+    .figure-card .value {
+      font-family: var(--font-headline);
+      font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--on-surface);
+      line-height: 1.1;
+      margin: var(--space-xs) 0;
+    }
+    .figure-card .label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: var(--label-tracking);
+    }
+
+    /* Diagnostic Panel */
+    .diagnostic-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 3px solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .symptom-list {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .symptom-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      width: 100%;
+      min-height: 44px;
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+      line-height: 1.45;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .symptom-btn:hover {
+      background: var(--surface-container);
+    }
+    .symptom-btn[aria-pressed="true"] {
+      background: var(--primary-soft);
+      box-shadow: inset 3px 0 0 var(--primary);
+      font-weight: 600;
+    }
+    .diagnostic-output {
+      margin-top: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      border-radius: var(--rounded);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline);
+      background: var(--on-surface);
+      color: var(--background);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn--secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+    }
+    .btn--secondary:hover {
+      background: var(--surface-container-high);
+      border-color: var(--outline);
+      color: var(--on-surface);
+    }
+    .btn--teal {
+      background: var(--secondary);
+      border-color: var(--secondary);
+      color: var(--on-secondary);
+    }
+    .btn--teal:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Concentric Layers & 2-4 Rule Sandbox */
+    .sandbox-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+    .svg-stage {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .svg-canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .layer-ring {
+      cursor: pointer;
+      transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+      transform-origin: center;
+    }
+    .layer-ring:hover { opacity: 0.88; }
+    .layer-detail-panel {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .mode-switch-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .mode-btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .mode-btn[aria-pressed="true"] {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .mode-btn--trap[aria-pressed="true"] {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+
+    /* 2-4 Rule Working Memory Bench */
+    .wm-bench {
+      margin-top: var(--space-lg);
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-lg);
+      border-radius: var(--rounded);
+    }
+    .wm-meter-track {
+      height: 12px;
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      margin: var(--space-sm) 0;
+    }
+    .wm-meter-fill {
+      height: 100%;
+      width: 45%;
+      background: var(--secondary);
+      transition: width var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+    }
+    .wm-tokens {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin: var(--space-md) 0;
+    }
+    .wm-chip {
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .wm-chip--overload {
+      border-color: var(--error);
+      background: var(--trap-soft);
+      color: var(--trap-text);
+    }
+    .wm-chip--chunked {
+      border-color: var(--secondary);
+      background: var(--secondary-soft);
+      color: var(--secondary);
+    }
+
+    /* Curated Knowledge Matrix (Theme -> Method -> Cognitive Logic) */
+    .filter-bar {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface);
+      text-transform: uppercase;
+      letter-spacing: var(--label-tracking);
+    }
+    .text-input, .select-input, .textarea-input {
+      width: 100%;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+    }
+    .select-input {
+      padding-right: 2rem;
+    }
+    .textarea-input {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+    .matrix-status-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin: var(--space-md) 0;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+    .method-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      transition: box-shadow var(--dur-short) var(--ease-out);
+    }
+    .method-card--highlighted {
+      box-shadow: 0 0 0 2px var(--load-accent);
+      background: var(--surface-container-low);
+    }
+    .method-card-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      border-bottom: var(--card-border);
+      padding-bottom: var(--space-sm);
+    }
+    .method-block {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .block-kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      letter-spacing: var(--label-tracking);
+      color: var(--primary);
+    }
+    .block-kicker--teal { color: var(--secondary); }
+    .block-kicker--trap { color: var(--trap-text); }
+    .block-kicker--load { color: var(--tertiary); }
+
+    .trap-strip {
+      background: var(--trap-soft);
+      border-left: 3px solid var(--error);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.9rem;
+      color: var(--on-surface);
+    }
+    .source-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-top: auto;
+      padding-top: var(--space-sm);
+      border-top: var(--card-border);
+    }
+    .video-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 36px;
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      color: var(--primary);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .video-chip:hover {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+    }
+    .video-chip--active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    /* Inline Source Inspector Drawer */
+    .source-inspector {
+      margin-top: var(--space-lg);
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      border-left: 4px solid var(--primary);
+      border-radius: var(--rounded);
+      padding: var(--space-lg);
+    }
+
+    /* Earned-Answer Friction Lab */
+    .friction-lab {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 4px solid var(--load-accent);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+    }
+    .friction-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      gap: var(--space-xl);
+      margin-top: var(--space-lg);
+    }
+    .friction-compare {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .compare-pane {
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      border: var(--card-border);
+    }
+    .compare-pane--trap {
+      background: var(--trap-soft);
+      border-color: var(--error);
+    }
+    .compare-pane--earned {
+      background: var(--secondary-soft);
+      border-color: var(--secondary);
+    }
+    .progress-bar-track {
+      height: 8px;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      margin: var(--space-sm) 0;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--load-accent);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Four Core Pillars Deep-Dive */
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+    }
+    .pillar-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .pillar-box--wide {
+      grid-column: 1 / -1;
+    }
+    .ai-eval-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .checkbox-card {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      cursor: pointer;
+    }
+    .checkbox-card input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* Case Studies Table & Cards */
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(265px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+    .case-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 3px solid var(--secondary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .metric-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--outline-variant);
+      padding: var(--space-xs) 0;
+      font-size: 0.9rem;
+    }
+    .metric-val {
+      font-family: var(--font-label);
+      font-weight: 600;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Video Directory Table */
+    .data-table-wrap {
+      overflow-x: auto;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9375rem;
+    }
+    .data-table th {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: var(--label-tracking);
+      padding: var(--space-md);
+      border-bottom: 1.5px solid var(--outline);
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .data-table td {
+      padding: var(--space-md);
+      border-bottom: var(--card-border);
+      vertical-align: top;
+    }
+    .data-table tr:hover td {
+      background: var(--background);
+    }
+
+    /* Toast / Inline Feedback */
+    .inline-toast {
+      position: fixed;
+      bottom: var(--space-lg);
+      right: var(--space-lg);
+      max-width: 360px;
+      background: var(--on-surface);
+      color: var(--background);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded);
+      border-left: 4px solid var(--load-accent);
+      font-size: 0.9rem;
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+    }
+    .inline-toast.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded);
+    }
+
+    .hidden-panel { display: none; }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .hero-grid,
+      .sandbox-grid,
+      .friction-grid,
+      .ai-eval-grid,
+      .pillar-grid,
+      .filter-bar {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid { padding: var(--space-md); gap: var(--space-xl); }
+      .kpi-strip,
+      .friction-compare {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .friction-lab { padding: var(--space-md); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+
+    <!-- 01. OPENING DOSSIER & DIAGNOSTIC ENTRY -->
+    <header aria-label="网站导言与诊断入口">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill">NON-LINEAR COGNITIVE CANVAS</span>
+          <span class="dossier-pill dossier-pill--secondary">反认知外包实验室</span>
+          <span class="dossier-meta">DR. JUSTIN SUNG · 医学博士 / 学习科学教练 / I CAN STUDY</span>
+        </div>
+        <div class="dossier-bar-left">
+          <span class="dossier-meta" id="user-progress-badge">已挣得答案: 0 次 · 诊断: 未激活</span>
+          <button type="button" class="btn btn--secondary" id="reset-state-btn" onclick="handleResetState(this)">重置实验进度</button>
+        </div>
+      </div>
+
+      <h1 class="title">Dr. Justin Sung 学习方法知识策展画布</h1>
+      <p class="standfirst">当 AI 可以瞬间替你总结文本、生成抽认卡与写出答案，“让人感到轻松”的学习方式正在系统性摧毁你的高阶思维。本画布系统整理 40+ 期核心视频方法论，按「分主题 × 具体学习方法 × 底层认知逻辑」结构化呈现。</p>
+
+      <nav class="nav-strip" aria-label="模块快捷导航">
+        <button type="button" class="nav-link" onclick="scrollToSection('sec-sandbox')"><i data-lucide="layers" width="16" height="16" aria-hidden="true"></i>同心圆分层与 2-4 法则</button>
+        <button type="button" class="nav-link" onclick="scrollToSection('sec-matrix')"><i data-lucide="layout-grid" width="16" height="16" aria-hidden="true"></i>主题-方法-逻辑全景库</button>
+        <button type="button" class="nav-link" onclick="scrollToSection('sec-friction')"><i data-lucide="shield-alert" width="16" height="16" aria-hidden="true"></i>挣得答案思考阻尼</button>
+        <button type="button" class="nav-link" onclick="scrollToSection('sec-pillars')"><i data-lucide="cpu" width="16" height="16" aria-hidden="true"></i>四大核心模块精讲</button>
+        <button type="button" class="nav-link" onclick="scrollToSection('sec-cases')"><i data-lucide="file-check-2" width="16" height="16" aria-hidden="true"></i>真实案例拆解</button>
+        <button type="button" class="nav-link" onclick="scrollToSection('sec-videos')"><i data-lucide="youtube" width="16" height="16" aria-hidden="true"></i>YouTube 视频来源索引</button>
+      </nav>
+
+      <div class="hero-grid">
+        <div>
+          <p class="prose">Justin Sung 曾经历过每天苦读 20 小时却频繁遗忘的传统医学生阶段，在跨越 10,000+ 小时学习实践与上万名学生/职场高管辅导后，他提出一个反直觉的核心原则：<strong>记忆不是“重复背诵”塞进去的，而是大脑高阶信息加工（Information Processing）留下的副产品（Residue of Thought）。</strong></p>
+
+          <div class="kpi-strip">
+            <div class="figure-card figure-card--accent-top">
+              <div class="label">同心圆前 3 层掌握度</div>
+              <div class="value">80–90%+</div>
+              <p class="prose-muted" style="font-size:0.85rem;">先打通 L1 逻辑、L2 概念与 L3 关键细节，无需在 L4 琐碎细节耗尽精力。</p>
+            </div>
+            <div class="figure-card figure-card--load-top">
+              <div class="label">2–4 工作记忆黄金容量</div>
+              <div class="value">2–4 组块</div>
+              <p class="prose-muted" style="font-size:0.85rem;">单次同时处理的孤立变量超过 4–5 个，工作台即进入过载停机。</p>
+            </div>
+            <div class="figure-card figure-card--teal-top">
+              <div class="label">L3 深度阅读瓶颈翻转</div>
+              <div class="value">150–200 WPM</div>
+              <p class="prose-muted" style="font-size:0.85rem;">超过此阅读速度后，瓶颈不再是眼速，而是大脑批判与联结的速度。</p>
+            </div>
+          </div>
+
+          <div class="aside-box" style="margin-top: var(--space-lg);">
+            <div class="block-kicker">关于 YouTube 原视频跳转与检索机制说明</div>
+            <p class="prose-muted" style="font-size:0.9rem; margin-top:var(--space-xs);">本画布所引用的全部学习方法与案例均严格溯源自 Dr. Justin Sung 公开视频逐字稿。为遵守当前沙盒离线安全策略且不伪造未提供的视频链接，点击画布中任意<strong>YouTube 视频徽章</strong>将即时打开溯源抽屉并<strong>一键复制精确片名检索词（如 Justin Sung + 原标题）</strong>，同时高亮该视频关联的所有学习方法，方便你在 YouTube 直接粘贴精准定位原片。</p>
+          </div>
+        </div>
+
+        <!-- DIAGNOSTIC ENTRY -->
+        <aside class="diagnostic-box" aria-label="认知症状诊断入口">
+          <div class="dossier-bar" style="margin-bottom:var(--space-sm);">
+            <span class="index-num">诊断入口</span>
+            <span class="dossier-meta">SELF-REGULATED DIAGNOSIS</span>
+          </div>
+          <h2 class="subhead">先别急着背方法：选择你目前最卡壳的症状</h2>
+          <p class="prose-muted" style="font-size:0.875rem; margin-top:var(--space-xs);">点击最符合你现状的一项，诊断你正在触发哪类认知陷阱，并匹配处方方法与原视频来源。</p>
+
+          <div class="symptom-list" role="group" aria-label="学习卡壳症状选择">
+            <button type="button" class="symptom-btn" id="sym-ai" aria-pressed="false" onclick="selectSymptom('ai')">
+              <i data-lucide="bot" width="18" height="18" aria-hidden="true"></i>
+              <span>把复杂资料丢给 AI 总结，当时觉得豁然开朗，两周后却彻底忘光、也讲不出来。</span>
+            </button>
+            <button type="button" class="symptom-btn" id="sym-overload" aria-pressed="false" onclick="selectSymptom('overload')">
+              <i data-lucide="book-open" width="18" height="18" aria-hidden="true"></i>
+              <span>打开专业教材或论文习惯从第一页逐字读、逐条记，越往后越觉得知识点碎成一地。</span>
+            </button>
+            <button type="button" class="symptom-btn" id="sym-anki" aria-pressed="false" onclick="selectSymptom('anki')">
+              <i data-lucide="layers" width="18" height="18" aria-hidden="true"></i>
+              <span>每天狂刷 Anki 抽认卡和题库，孤立名词全记得，一碰到跨章节综合案例或实操就卡死。</span>
+            </button>
+            <button type="button" class="symptom-btn" id="sym-burnout" aria-pressed="false" onclick="selectSymptom('burnout')">
+              <i data-lucide="battery-warning" width="18" height="18" aria-hidden="true"></i>
+              <span>计划表排满番茄钟，但读几页就开始“脑子发钝”，同一句话看三遍也进不去，只能硬撑。</span>
+            </button>
+          </div>
+
+          <div class="diagnostic-output" id="diagnostic-result" aria-live="polite">
+            <span class="dossier-meta">等待选择症状 — 点击上方任一选项开启认知处方</span>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <!-- 02. CONCENTRIC LAYERS & 2-4 RULE SANDBOX -->
+    <section id="sec-sandbox" aria-labelledby="h-sandbox">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill dossier-pill--primary">MODULE LAB 01</span>
+          <span class="dossier-meta">同心圆分层阅读 (L1–L4) × 2–4 法则工作台</span>
+        </div>
+        <span class="dossier-meta">核心原片: 4 Layers of Learning / L2R2 / 2-4 Method</span>
+      </div>
+
+      <h2 class="section-title" id="h-sandbox">为什么教科书越读越慌？你把同心圆的顺序走反了</h2>
+      <p class="prose">绝大多数教材按“细节堆叠”线性展开，天然把你诱导到最外层的 <strong>Layer 4（任意细节）</strong>。当大脑在没有逻辑地基时硬吞细节，它必须同时承担“理解含义 + 死记硬背 + 猜测它为什么重要”三重负荷，瞬间触发认知过载。点击左侧同心圆层级或切换学习路径，直观对比两种策略：</p>
+
+      <div class="sandbox-grid" style="margin-top: var(--space-lg);">
+        <div class="svg-stage">
+          <div class="mode-switch-row" role="group" aria-label="学习路径对比模式">
+            <button type="button" class="mode-btn" id="path-sung" aria-pressed="true" onclick="setLayerOrderMode('sung')">Justin Sung 正序：L1 → L2 → L3 (向心分层)</button>
+            <button type="button" class="mode-btn mode-btn--trap" id="path-linear" aria-pressed="false" onclick="setLayerOrderMode('linear')">传统教科书陷阱：L4 → L1 (倒序硬啃)</button>
+          </div>
+
+          <svg class="svg-canvas" viewBox="0 0 460 400" role="img" aria-label="Justin Sung 四层同心圆学习架构交互图">
+            <!-- Outer Layer 4: Arbitrary Details (Red dashed trap ring) -->
+            <circle id="ring-4" class="layer-ring" cx="230" cy="195" r="172" fill="var(--trap-soft)" stroke="var(--error)" stroke-width="2" stroke-dasharray="6 5" onclick="inspectLayer(4)" />
+            <text x="230" y="46" text-anchor="middle" font-family="var(--font-label)" font-size="11" font-weight="600" fill="var(--trap-text)">L4 任意细节层 ARBITRARY DETAILS (外围陷阱)</text>
+
+            <!-- Layer 3: Important Details (Amber) -->
+            <circle id="ring-3" class="layer-ring" cx="230" cy="195" r="130" fill="var(--load-soft)" stroke="var(--load-accent)" stroke-width="2.5" onclick="inspectLayer(3)" />
+            <text x="230" y="88" text-anchor="middle" font-family="var(--font-label)" font-size="11" font-weight="600" fill="var(--tertiary)">L3 重要细节层 IMPORTANT DETAILS (80–90% 掌握线)</text>
+
+            <!-- Layer 2: Concepts (Teal) -->
+            <circle id="ring-2" class="layer-ring" cx="230" cy="195" r="88" fill="var(--secondary-soft)" stroke="var(--secondary)" stroke-width="2.5" onclick="inspectLayer(2)" />
+            <text x="230" y="132" text-anchor="middle" font-family="var(--font-label)" font-size="11" font-weight="600" fill="var(--secondary)">L2 概念与关系层 CONCEPTS</text>
+
+            <!-- Layer 1: Logic Core (Indigo) -->
+            <circle id="ring-1" class="layer-ring" cx="230" cy="195" r="46" fill="var(--primary)" stroke="var(--on-surface)" stroke-width="2" onclick="inspectLayer(1)" />
+            <text x="230" y="191" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="700" fill="var(--on-primary)">L1 逻辑层</text>
+            <text x="230" y="208" text-anchor="middle" font-family="var(--font-label)" font-size="10" fill="var(--primary-soft)">LOGIC CORE</text>
+
+            <!-- Direction indicator -->
+            <g id="svg-direction-indicator">
+              <line x1="230" y1="248" x2="230" y2="352" stroke="var(--primary)" stroke-width="2.5" />
+              <polygon points="230,362 224,350 236,350" fill="var(--primary)" />
+              <rect x="135" y="368" width="190" height="24" rx="3" fill="var(--primary)" />
+              <text id="svg-dir-label" x="230" y="384" text-anchor="middle" font-family="var(--font-label)" font-size="11" font-weight="600" fill="var(--on-primary)">正序扫描：由内向外逐轮过滤</text>
+            </g>
+          </svg>
+        </div>
+
+        <div>
+          <div class="layer-detail-panel" id="layer-inspector" aria-live="polite">
+            <div class="dossier-bar" style="margin-bottom:var(--space-sm);">
+              <span class="dossier-pill dossier-pill--primary" id="layer-badge">LAYER 1 · 地基内核</span>
+              <span class="dossier-meta">点击左侧任意同心圆切换层级</span>
+            </div>
+            <h3 class="subhead" id="layer-title">L1 逻辑层（Logic Layer）：一切知识生长的意图与骨架</h3>
+            <p class="prose" id="layer-desc" style="margin-top:var(--space-sm);">解决“为什么要学这个主题？它在真实世界解决什么问题？核心因果主线是什么？”。如果跳过 L1，大脑无法判断后续任何细节的优先级。</p>
+            <div class="aside-box" style="margin-top:var(--space-md);">
+              <div class="block-kicker">具体操作与过滤信号</div>
+              <p id="layer-action" style="margin:var(--space-xs) 0 0 0; font-size:0.9375rem;">第一遍速览整章标题、图表与结论，刻意忽略陌生术语，只提炼 3–4 个最核心的因果主干。</p>
+            </div>
+            <div class="source-chip-row" style="margin-top:var(--space-md);">
+              <button type="button" class="video-chip" onclick="openVideoSource('4 Layers of Learning Every Student MUST Master')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>4 Layers of Learning Every Student MUST Master</button>
+              <button type="button" class="video-chip" onclick="openVideoSource('How To Absorb Everything You Read Like A Sponge')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>How To Absorb Everything You Read Like A Sponge</button>
+            </div>
+          </div>
+
+          <!-- 2-4 RULE WORKING MEMORY SIMULATOR -->
+          <div class="wm-bench">
+            <div class="dossier-bar" style="margin-bottom:var(--space-sm);">
+              <span class="dossier-pill">2–4 法则工作记忆实验室</span>
+              <span class="dossier-meta" id="wm-status-badge">状态：良性认知负载</span>
+            </div>
+            <p class="prose-muted" style="font-size:0.9rem;">Justin Sung 强调：人类工作记忆同时只能稳定操纵 2–4 个独立要素（超出即发生“关注点过载”）。点击增减工作台上的概念要素，体验“硬塞”与“2–4 组块归并”的差别：</p>
+
+            <div class="wm-meter-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="45" id="wm-progress-aria">
+              <div class="wm-meter-fill" id="wm-meter-fill"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-family:var(--font-label); font-size:0.75rem; color:var(--on-surface-variant);">
+              <span>0 空转低效</span>
+              <span style="color:var(--tertiary); font-weight:600;">2–4 要素：良性负载黄金区</span>
+              <span style="color:var(--trap-text); font-weight:600;">5+ 要素：过载停机</span>
+            </div>
+
+            <div class="wm-tokens" id="wm-tokens-wrap"></div>
+
+            <div style="display:flex; flex-wrap:wrap; gap:var(--space-sm);">
+              <button type="button" class="btn btn--secondary" onclick="wmAddFactor()"><i data-lucide="plus" width="15" height="15" aria-hidden="true"></i>引入 1 个新概念要素</button>
+              <button type="button" class="btn btn--teal" onclick="wmChunkFactors()"><i data-lucide="git-merge" width="15" height="15" aria-hidden="true"></i>执行 2–4 组块归并 (Chunking)</button>
+              <button type="button" class="btn btn--secondary" onclick="wmResetFactors()">重置工作台</button>
+            </div>
+            <p id="wm-feedback" style="margin:var(--space-sm) 0 0 0; font-size:0.875rem; color:var(--on-surface); font-weight:500;"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03. CURATED KNOWLEDGE MATRIX: THEME x METHOD x LOGIC -->
+    <section id="sec-matrix" aria-labelledby="h-matrix">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill dossier-pill--secondary">KNOWLEDGE CURATION MATRIX</span>
+          <span class="dossier-meta">分主题 × 具体学习方法 × 底层认知逻辑</span>
+        </div>
+        <span class="dossier-meta" id="matrix-count-label">显示 16 / 16 个核心方法单元</span>
+      </div>
+
+      <h2 class="section-title" id="h-matrix">分主题方法论全景库：方法只是表层，认知逻辑才是引擎</h2>
+      <p class="prose">Justin Sung 反复警告：“不要问哪个技巧最好（What is the best technique），要看这个技巧触发了大脑什么加工过程。” 下方按<strong>四大核心主题</strong>归类所有具体方法、底层科学逻辑、避坑红线及对应 YouTube 原片来源。</p>
+
+      <div class="filter-bar" style="margin-top: var(--space-lg);">
+        <div class="field-group">
+          <label class="field-label" for="filter-search">搜索主题、方法、认知术语或原片标题</label>
+          <input type="text" id="filter-search" class="text-input" placeholder="如：Anki、L2R2、2-4、套索、Pre-mortem、瓶颈翻转..." oninput="applyMatrixFilters()">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="filter-module">按四大核心模块筛选</label>
+          <select id="filter-module" class="select-input" onchange="applyMatrixFilters()">
+            <option value="all">全部核心主题 (16 单元)</option>
+            <option value="ai-boundary">模块一：AI 边界与大脑防退化</option>
+            <option value="higher-order">模块二：高阶认知与组块建构</option>
+            <option value="ai-workflow">模块三：AI 协同实战工作流</option>
+            <option value="focus-life">模块四：注意力节律与案例元认知</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="filter-stage">按认知环节筛选</label>
+          <select id="filter-stage" class="select-input" onchange="applyMatrixFilters()">
+            <option value="all">全部认知环节</option>
+            <option value="encoding">深度编码与分层 (Encoding)</option>
+            <option value="reading">深度阅读与吸收 (Reading)</option>
+            <option value="ai-guard">AI 边界与反外包 (AI Guardrail)</option>
+            <option value="energy">注意力与系统管理 (Self-Mgmt)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="matrix-status-row">
+        <span class="dossier-meta" id="active-video-filter-note">当前未锁定特定视频来源（点击卡片底部任一视频徽章可精准溯源）</span>
+        <button type="button" class="btn btn--secondary hidden-panel" id="clear-video-filter-btn" onclick="clearVideoFilter()">清除视频筛选高亮</button>
+      </div>
+
+      <div class="card-grid" id="matrix-cards-container"></div>
+
+      <!-- Inline Video Source Inspector -->
+      <div class="source-inspector hidden-panel" id="video-inspector-drawer" aria-live="polite">
+        <div class="dossier-bar" style="margin-bottom:var(--space-sm);">
+          <div class="dossier-bar-left">
+            <span class="dossier-pill dossier-pill--primary">YOUTUBE 视频溯源卡</span>
+            <span class="dossier-meta" id="inspector-channel">CHANNEL: JUSTIN SUNG</span>
+          </div>
+          <button type="button" class="btn btn--secondary" onclick="closeVideoInspector()">收起溯源卡</button>
+        </div>
+        <h3 class="subhead" id="inspector-video-title">视频标题</h3>
+        <p class="prose-muted" id="inspector-video-summary" style="margin-top:var(--space-xs);"></p>
+        <div style="display:flex; flex-wrap:wrap; gap:var(--space-sm); margin-top:var(--space-md); align-items:center;">
+          <button type="button" class="btn" id="inspector-copy-btn" onclick="copyCurrentVideoQuery()"><i data-lucide="copy" width="15" height="15" aria-hidden="true"></i>一键复制 YouTube 精确搜索词</button>
+          <span class="dossier-meta" id="inspector-search-preview"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. EARNED-ANSWER COGNITIVE FRICTION LAB -->
+    <section id="sec-friction" aria-labelledby="h-friction">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill">MODULE LAB 02 · 反认知外包阻尼器</span>
+          <span class="dossier-meta">“挣得答案”思考阻尼交互 (EARNED-ANSWER FRICTION)</span>
+        </div>
+        <span class="dossier-meta">核心原片: How to Use AI Without Letting It Think for You</span>
+      </div>
+
+      <div class="friction-lab">
+        <h2 class="section-title" id="h-friction">实验：如果大脑没有经历“整理混乱”的痛感，你就没有真正学到</h2>
+        <p class="prose">Justin Sung 指出，AI 最大的危害在于它提供零摩擦的<strong>“流畅感信号（Fluency Signals）”</strong>——你读完觉得全懂了，但因大脑跳过了比较、筛选与建网，知识并未编码。下方实验室强制设置<strong>思考阻尼</strong>：你必须先输出 ≥15 字自己的结构化推演，才能“挣得”并对比专家方案。</p>
+
+        <div class="mode-switch-row" style="margin-top:var(--space-md);" role="group" aria-label="选择思辨场景">
+          <button type="button" class="mode-btn" id="fric-tab-0" aria-pressed="true" onclick="selectFrictionScenario(0)">场景 A：用 AI 突击一门陌生技术</button>
+          <button type="button" class="mode-btn" id="fric-tab-1" aria-pressed="false" onclick="selectFrictionScenario(1)">场景 B：啃 30 页高密度学术文献</button>
+          <button type="button" class="mode-btn" id="fric-tab-2" aria-pressed="false" onclick="selectFrictionScenario(2)">场景 C：背完大量细节却做不对考题</button>
+        </div>
+
+        <div class="friction-grid">
+          <div>
+            <div class="block-kicker block-kicker--load">STEP 1 · 面对真实学习困境</div>
+            <h3 class="subhead" id="fric-prompt-title" style="margin-top:var(--space-xs);"></h3>
+            <p class="prose" id="fric-prompt-body" style="margin-top:var(--space-sm);"></p>
+
+            <div class="aside-box" style="margin-top:var(--space-md);">
+              <div class="block-kicker">高阶思辨追问（先别看答案，试着自己推演）</div>
+              <p id="fric-guiding-q" style="margin:var(--space-xs) 0 0 0; font-size:0.9375rem; font-weight:600; color:var(--primary);"></p>
+            </div>
+          </div>
+
+          <div>
+            <div class="field-group">
+              <label class="field-label" for="fric-user-input">STEP 2 · 写下你的初步假设或关系框架（至少 15 字以通过思考阻尼）</label>
+              <textarea id="fric-user-input" class="textarea-input" placeholder="写下你的因果推演、对比点或反例猜想，激活大脑信息加工……" oninput="updateFrictionProgress()"></textarea>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="fric-progress-fill"></div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-sm);">
+              <span class="dossier-meta" id="fric-char-status">已输入 0 / 15 字（需完成最小思考阻尼）</span>
+              <button type="button" class="btn btn--teal" id="fric-unlock-btn" disabled onclick="unlockEarnedAnswer()"><i data-lucide="unlock" width="15" height="15" aria-hidden="true"></i>挣得答案并对比 AI 捷径</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="fric-unlocked-output" class="hidden-panel" style="margin-top:var(--space-lg); border-top:var(--section-rule); padding-top:var(--space-lg);">
+          <div class="dossier-bar" style="margin-bottom:var(--space-sm);">
+            <span class="dossier-pill dossier-pill--secondary">已通过思考阻尼 · 答案已解锁</span>
+            <span class="dossier-meta" id="fric-user-echo"></span>
+          </div>
+          <div class="friction-compare">
+            <div class="compare-pane compare-pane--trap">
+              <div class="block-kicker block-kicker--trap">认知外包捷径（AI 替你思考的后果）</div>
+              <p id="fric-trap-text" style="margin:var(--space-xs) 0 0 0; font-size:0.9375rem;"></p>
+            </div>
+            <div class="compare-pane compare-pane--earned">
+              <div class="block-kicker block-kicker--teal">Justin Sung 方案（含 Anti-thesis 反论题边界）</div>
+              <p id="fric-earned-text" style="margin:var(--space-xs) 0 0 0; font-size:0.9375rem;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. FOUR CORE PILLARS DEEP DIVE -->
+    <section id="sec-pillars" aria-labelledby="h-pillars">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill dossier-pill--primary">CORE ARCHITECTURE</span>
+          <span class="dossier-meta">四大核心模块底层逻辑与可视化工具</span>
+        </div>
+        <span class="dossier-meta">AI BOUNDARIES · SCHEMA · WORKFLOW · MASTERY</span>
+      </div>
+
+      <h2 class="section-title" id="h-pillars">四大核心模块：从防认知退化到高阶生产力闭环</h2>
+
+      <div class="pillar-grid" style="margin-top: var(--space-lg);">
+
+        <!-- Pillar 1: AI Boundary Evaluator + Value Threshold SVG -->
+        <article class="pillar-box pillar-box--wide">
+          <div class="dossier-bar" style="margin-bottom:0;">
+            <span class="index-num">模块 01 · AI 边界与大脑防退化</span>
+            <span class="dossier-meta">核心原片: How ChatGPT Slowly Destroys Your Brain / How to Not Get Fired</span>
+          </div>
+          <div class="ai-eval-grid">
+            <div>
+              <h3 class="subhead">“价值阈值上移”与 AI 认知外包双问决策器</h3>
+              <p class="prose-muted" style="margin-top:var(--space-xs); font-size:0.9375rem;">过去你工作中仅占 20% 的高情境、多因素耦合决策，在 AI 接管 80% 机械执行后变成了决定你不可替代性的 80%。使用 AI 前，用右侧 3 个开关测一测当前任务是否在侵蚀你的核心大脑能力：</p>
+
+              <!-- SVG Chart: Value Threshold Shift -->
+              <svg class="svg-canvas" viewBox="0 0 480 220" style="margin-top:var(--space-md);" role="img" aria-label="AI 时代工作价值阈值上移对比图">
+                <line x1="40" y1="180" x2="460" y2="180" stroke="var(--on-surface)" stroke-width="1.5" />
+                <line x1="40" y1="25" x2="40" y2="180" stroke="var(--on-surface)" stroke-width="1.5" />
+                <!-- Dashed gridlines -->
+                <line x1="40" y1="100" x2="460" y2="100" stroke="var(--outline-variant)" stroke-dasharray="3 3" />
+                <line x1="40" y1="55" x2="460" y2="55" stroke="var(--outline-variant)" stroke-dasharray="3 3" />
+                <!-- Old lower-order curve -->
+                <path d="M 45 160 Q 170 155, 290 135 T 450 150" fill="none" stroke="var(--error)" stroke-width="2.5" stroke-dasharray="5 4" />
+                <text x="315" y="168" font-family="var(--font-label)" font-size="10" font-weight="600" fill="var(--trap-text)">孤立记忆/低阶执行价值暴跌</text>
+                <!-- Higher-order rising curve -->
+                <path d="M 45 150 Q 190 120, 310 75 T 450 32" fill="none" stroke="var(--secondary)" stroke-width="3" />
+                <circle cx="450" cy="32" r="4.5" fill="var(--secondary)" />
+                <text x="265" y="38" font-family="var(--font-label)" font-size="10.5" font-weight="700" fill="var(--secondary)">高阶情境整合与复杂判断（价值飙升）</text>
+                <!-- Threshold line -->
+                <line x1="40" y1="92" x2="460" y2="92" stroke="var(--load-accent)" stroke-width="2" />
+                <rect x="48" y="75" width="168" height="16" fill="var(--load-soft)" rx="2" />
+                <text x="53" y="87" font-family="var(--font-label)" font-size="9.5" font-weight="600" fill="var(--tertiary)">AI 时代“有价值专业力”新阈值</text>
+                <text x="45" y="198" font-family="var(--font-label)" font-size="10" fill="var(--on-surface-variant)">认知复杂度低（AI 幻觉可控 / 标准化）</text>
+                <text x="310" y="198" font-family="var(--font-label)" font-size="10" fill="var(--on-surface-variant)">多因素耦合 + 高风险敞口</text>
+              </svg>
+            </div>
+
+            <div style="background:var(--surface-container); padding:var(--space-md); border-radius:var(--rounded); border-top:var(--section-rule);">
+              <div class="block-kicker">交互式 AI 任务边界诊断器</div>
+              <div style="display:flex; flex-direction:column; gap:var(--space-sm); margin-top:var(--space-sm);">
+                <label class="checkbox-card">
+                  <input type="checkbox" id="ai-chk-bypass" onchange="evaluateAiDecision()">
+                  <span><strong>1. 核心加工绕过：</strong>这件事正好是“感觉混乱、费脑筋、需要我亲自梳理因果关系”的关键学习环节吗？</span>
+                </label>
+                <label class="checkbox-card">
+                  <input type="checkbox" id="ai-chk-timesave" checked onchange="evaluateAiDecision()">
+                  <span><strong>2. 显著省时收益：</strong>若 AI 与我水平相当，交给它是否能为我节省出大量重复检索/机械劳动时间？</span>
+                </label>
+                <label class="checkbox-card">
+                  <input type="checkbox" id="ai-chk-risk" onchange="evaluateAiDecision()">
+                  <span><strong>3. 高风险与高情境依赖：</strong>该任务是否存在“AI 95% 准确率仍会导致严重后果”或缺乏现成最佳实践？</span>
+                </label>
+              </div>
+              <div id="ai-eval-verdict" style="margin-top:var(--space-md); padding:var(--space-md); background:var(--surface-container-low); border-radius:var(--rounded); border:var(--card-border);" aria-live="polite"></div>
+              <div class="source-chip-row" style="border-top:none; padding-top:var(--space-sm);">
+                <button type="button" class="video-chip" onclick="openVideoSource(this.dataset.video)" data-video="How to Use AI Without Letting It Think for You (my full framework)"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>How to Use AI Without Letting It Think for You</button>
+                <button type="button" class="video-chip" onclick="openVideoSource('How ChatGPT Slowly Destroys Your Brain')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>How ChatGPT Slowly Destroys Your Brain</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Pillar 2: Higher-Order Thinking & PERO + Therapeutic Index -->
+        <article class="pillar-box">
+          <div class="dossier-bar" style="margin-bottom:0;">
+            <span class="index-num">模块 02 · 高阶认知与组块建构</span>
+            <span class="dossier-meta">PERO 系统 × 治疗窗法则</span>
+          </div>
+          <h3 class="subhead">编码决定遗忘曲线斜率：别用低阶技术过量中毒</h3>
+          <p class="prose-muted" style="font-size:0.9375rem;">Justin Sung 用医学的<strong>治疗指数（Therapeutic Index）</strong>比喻学习技巧：抽认卡/Anki 在 Layer 3–4 是良药，但用它来学 Layer 1–2 的逻辑与概念就是“过量有害”。真正高效的是运行 <strong>PERO 闭环</strong>：</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-sm);">
+            <div class="figure-card" style="padding:var(--space-sm) var(--space-md);">
+              <div class="block-kicker">P · Priming 预启动</div>
+              <p style="margin:2px 0 0 0; font-size:0.875rem;">课前/读前先抓 3–4 个大框架与盲区，让大脑带着问题进场。</p>
+            </div>
+            <div class="figure-card" style="padding:var(--space-sm) var(--space-md);">
+              <div class="block-kicker block-kicker--teal">E · Encoding 深度编码</div>
+              <p style="margin:2px 0 0 0; font-size:0.875rem;">比对异同、排权重、空间导图套索重构，压平初始遗忘曲线。</p>
+            </div>
+            <div class="figure-card" style="padding:var(--space-sm) var(--space-md);">
+              <div class="block-kicker block-kicker--load">R · Reference 参考校准</div>
+              <p style="margin:2px 0 0 0; font-size:0.875rem;">查漏补缺，清理孤立细枝末节与主动修剪（Pruning）废卡。</p>
+            </div>
+            <div class="figure-card" style="padding:var(--space-sm) var(--space-md);">
+              <div class="block-kicker">O · Overlearning 迁移检索</div>
+              <p style="margin:2px 0 0 0; font-size:0.875rem;">不靠原顺序背诵，而是模拟“教给零基础小白”或高阶综合题输出。</p>
+            </div>
+          </div>
+
+          <svg class="svg-canvas" viewBox="0 0 420 155" role="img" aria-label="学习技术治疗窗倒U型曲线图">
+            <line x1="35" y1="125" x2="395" y2="125" stroke="var(--on-surface)" stroke-width="1.5" />
+            <rect x="140" y="25" width="135" height="100" fill="var(--secondary-soft)" opacity="0.7" />
+            <path d="M 45 118 C 110 115, 145 32, 208 30 C 270 32, 310 112, 385 120" fill="none" stroke="var(--primary)" stroke-width="3" />
+            <text x="208" y="20" text-anchor="middle" font-family="var(--font-label)" font-size="10" font-weight="700" fill="var(--secondary)">有效治疗窗：精准 Layer 3–4 + 主动修剪</text>
+            <text x="85" y="142" text-anchor="middle" font-family="var(--font-label)" font-size="9.5" fill="var(--on-surface-variant)">编码不足</text>
+            <text x="335" y="142" text-anchor="middle" font-family="var(--font-label)" font-size="9.5" fill="var(--trap-text)">过度刷卡/机械抄写(认知毒性)</text>
+          </svg>
+
+          <div class="source-chip-row">
+            <button type="button" class="video-chip" onclick="openVideoSource('7 Years of Building a Learning System in 12 minutes')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>7 Years of Building a Learning System</button>
+            <button type="button" class="video-chip" onclick="openVideoSource('10,000 Hours of No-BS Study Advice in 14 Minutes')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>10,000 Hours of No-BS Study Advice</button>
+            <button type="button" class="video-chip" onclick="openVideoSource(this.dataset.video)" data-video="How to use Anki like a PRO (by a Learning Expert)"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>How to use Anki like a PRO</button>
+          </div>
+        </article>
+
+        <!-- Pillar 3: AI Co-Thinking Workflow & Prompt Templates -->
+        <article class="pillar-box">
+          <div class="dossier-bar" style="margin-bottom:0;">
+            <span class="index-num">模块 03 · AI 协同实战工作流</span>
+            <span class="dossier-meta">反替身协作者 · ANTI-THESIS</span>
+          </div>
+          <h3 class="subhead">用 AI 做“盲区扫描仪”与“反论题审问官”，而非代写大脑</h3>
+          <p class="prose-muted" style="font-size:0.9375rem;">正确的 AI 协同永远发生在你<strong>亲自搭建出第一版骨架之后</strong>。以下两条指令模板（点击即可复制）将大模型强制锁定为辅助验证角色：</p>
+
+          <div class="figure-card" style="background:var(--background); padding:var(--space-md);">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+              <span class="block-kicker block-kicker--teal">指令 A：结构盲区扫描（绝不让它直接总结）</span>
+              <button type="button" class="btn btn--secondary" style="min-height:34px; padding:2px 10px; font-size:0.78rem;" onclick="copyPromptText('prompt-gap')">复制指令</button>
+            </div>
+            <p id="prompt-gap" style="margin:var(--space-xs) 0 0 0; font-size:0.875rem; font-family:var(--font-label);">这是我自己梳理的[主题]逻辑框架与核心节点关系：[粘贴你的草图逻辑]。请不要重写总结，只告诉我：1）我遗漏了哪个关键分支或反例？2）在这个被我忽略的分支里，最值得我去查证的 5–8 个核心关键词是什么？</p>
+          </div>
+
+          <div class="figure-card" style="background:var(--background); padding:var(--space-md);">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+              <span class="block-kicker block-kicker--load">指令 B：Anti-thesis 反论题与 Pre-mortem 验尸</span>
+              <button type="button" class="btn btn--secondary" style="min-height:34px; padding:2px 10px; font-size:0.78rem;" onclick="copyPromptText('prompt-antithesis')">复制指令</button>
+            </div>
+            <p id="prompt-antithesis" style="margin:var(--space-xs) 0 0 0; font-size:0.875rem; font-family:var(--font-label);">基于我的方案：[粘贴判断]。请扮演严格审问官：列出导致这个结论失效的 3 个前提条件（Anti-thesis），并用事前验尸法（Pre-mortem）推演半年后项目如果失败最可能死在哪一步，但不要替我做最终决策。</p>
+          </div>
+
+          <div class="source-chip-row">
+            <button type="button" class="video-chip" onclick="openVideoSource('Helping a Professional Learn Faster - Private Coaching Call')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>Helping a Professional Learn Faster</button>
+            <button type="button" class="video-chip" onclick="openVideoSource('5 Thinking Habits That Make You Look Smarter')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>5 Thinking Habits That Make You Look Smarter</button>
+            <button type="button" class="video-chip" onclick="openVideoSource('How to Read Anything Faster Than Everyone Else')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>How to Read Anything Faster (Bottleneck Flip)</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 06. REAL CASE STUDIES -->
+    <section id="sec-cases" aria-labelledby="h-cases">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill dossier-pill--secondary">MODULE 04 · GROUNDED CASE STUDIES</span>
+          <span class="dossier-meta">真实案例拆解（全部源自视频逐字稿实例）</span>
+        </div>
+        <span class="dossier-meta">MEDICINE · AI UPSKILLING · MONASH #1 · MEMORY PALACE</span>
+      </div>
+
+      <h2 class="section-title" id="h-cases">真实案例拆解：把认知理论变成可复现的战绩</h2>
+      <p class="prose">方法论是否成立，看真实高压力场域中的“投入产出比”。以下四个真实案例直接取自 Justin Sung 本人经历及私人辅导记录：</p>
+
+      <div class="case-grid" style="margin-top: var(--space-lg);">
+        <article class="case-card">
+          <div class="dossier-bar" style="margin-bottom:0;">
+            <span class="index-num">CASE 01</span>
+            <span class="dossier-meta">医学百页教材记忆重塑</span>
+          </div>
+          <h3 class="subhead">从日学 20 小时疯狂遗忘，到 100 页教材 >90% 留存</h3>
+          <p class="prose-muted" style="font-size:0.9rem;">17 岁时沉迷闪卡与死背，前期看似省力却累积巨额<strong>学习债务（Learning Debt）</strong>。转型后强制前置投资时间构建因果网络与视觉交互隐喻（用 1–2 小时为一个包含 70–100 个医学症状的复杂表格构建互锁视觉场景），后续仅在 1 个月和 6 个月各回顾一次即保持数年不褪色。</p>
+          <div class="metric-row"><span>教材单次编码留存</span><span class="metric-val">&gt; 90% / 100 页</span></div>
+          <div class="metric-row"><span>高难列表维持复习</span><span class="metric-val">第 1 月 &amp; 第 6 月各 1 次</span></div>
+          <div class="source-chip-row">
+            <button type="button" class="video-chip" onclick="openVideoSource('How To Train Yourself To Have An Exceptional Memory')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>Exceptional Memory</button>
+            <button type="button" class="video-chip" onclick="openVideoSource('Can AI Help Me Learn Faster? (DALL E 2)')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>Can AI Help Me Learn Faster</button>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="dossier-bar" style="margin-bottom:0;">
+            <span class="index-num">CASE 02</span>
+            <span class="dossier-meta">职场人 Julian 学习 AI 审计</span>
+          </div>
+          <h3 class="subhead">停止“救火式窄向问 AI”，转建底层判断框架</h3>
+          <p class="prose-muted" style="font-size:0.9rem;">辅导对象 Julian 为快速掌握 AI，遇到一个新工具就向 AI 窄向提问填窟窿，结果越学越焦虑。Justin 帮他审计系统后指出：问题多点散发时，应追问<strong>“具备哪套底层专家视角（Underlying Expertise），我就能自己看懂所有工具？”</strong>先人手画大图，再用 AI 仅补关键词盲区。</p>
+          <div class="metric-row"><span>学习路径重构</span><span class="metric-val">窄向救火 → 全局主干</span></div>
+          <div class="metric-row"><span>AI 角色限定</span><span class="metric-val">关键词盲区扫描器</span></div>
+          <div class="source-chip-row">
+            <button type="button" class="video-chip" onclick="openVideoSource('Helping a Professional Learn Faster - Private Coaching Call')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>Private Coaching Call</button>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="dossier-bar" style="margin-bottom:0;">
+            <span class="index-num">CASE 03</span>
+            <span class="dossier-meta">医院 70h 轮班 + 创业冲刺</span>
+          </div>
+          <h3 class="subhead">仅用 1 个月备考，排名 Monash 教育学硕士第一</h3>
+          <p class="prose-muted" style="font-size:0.9rem;">在临床住院医每周 60–70 小时高压轮班、每晚再做 3–5 小时教育创业的极限挤压下，依靠<strong>Order Control（主动重排学习顺序）</strong>与 4 层过滤法，把精力死死锁在 Layer 1–2 高权重主干上，彻底斩断无效逐字笔记与重复复习。</p>
+          <div class="metric-row"><span>硕士冲刺用时</span><span class="metric-val">1 个月排名 #1</span></div>
+          <div class="metric-row"><span>系统效率提升</span><span class="metric-val">+60% / 省 ≥10h/周</span></div>
+          <div class="source-chip-row">
+            <button type="button" class="video-chip" onclick="openVideoSource('Learn To Learn in 109 minutes')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>Learn To Learn in 109 min</button>
+            <button type="button" class="video-chip" onclick="openVideoSource('How To Change Your Life In 2025 (with Reverse Goal Setting)')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>Reverse Goal Setting</button>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="dossier-bar" style="margin-bottom:0;">
+            <span class="index-num">CASE 04</span>
+            <span class="dossier-meta">反常规节律与工具纠偏</span>
+          </div>
+          <h3 class="subhead">50% 专注停顿线、52/17 节律与拒绝“死磕或放弃”</h3>
+          <p class="prose-muted" style="font-size:0.9rem;">一旦同一段文字要读两三遍，表明专注已跌破 50% 阈值，强撑只会条件反射训练“走神工作”。将机械的 25/5 升级为 <strong>52/17</strong>，把重点从“赢下今天”转向<strong>“赢下这一周（Win the Week）+ 睡前清零”</strong>；并警示：双链数据库与常规记忆宫殿若无逻辑互锁，全是低阶拟态。</p>
+          <div class="metric-row"><span>立即休整触发点</span><span class="metric-val">专注跌至 50% 斜坡</span></div>
+          <div class="metric-row"><span>深度工作/恢复比</span><span class="metric-val">52 min : 17 min</span></div>
+          <div class="source-chip-row">
+            <button type="button" class="video-chip" onclick="openVideoSource('3-Point Checklist to Create Focus On Demand | Study Clinic')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>50% Focus Checklist</button>
+            <button type="button" class="video-chip" onclick="openVideoSource(this.dataset.video)" data-video="E2: A Smarter Way to Work (BETTER than Pomodoro)"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>52/17 Smarter Work</button>
+            <button type="button" class="video-chip" onclick="openVideoSource('7 Things I Did To Stop Wasting My Evenings After Work')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>Win the Week</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 07. COMPLETE YOUTUBE VIDEO SOURCE DIRECTORY -->
+    <section id="sec-videos" aria-labelledby="h-videos">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill">SOURCE DIRECTORY</span>
+          <span class="dossier-meta">YouTube 原视频策展索引库 · 点击一键复制精确检索标题并定位关联方法</span>
+        </div>
+        <span class="dossier-meta" id="dir-count">共收录 32 期核心对口视频来源</span>
+      </div>
+
+      <h2 class="section-title" id="h-videos">视频来源溯源索引（Channel: Justin Sung）</h2>
+      <p class="prose-muted">按模块快速浏览所有核心视频，点击任意行中的“定位关联方法”可瞬间过滤上方矩阵；点击“复制片名搜索”可直接粘贴到 YouTube 搜索观看原片。</p>
+
+      <div class="mode-switch-row" style="margin-top:var(--space-md);" role="group" aria-label="按模块过滤视频索引">
+        <button type="button" class="mode-btn" id="vdir-all" aria-pressed="true" onclick="filterVideoDirectory('all')">全部视频来源</button>
+        <button type="button" class="mode-btn" id="vdir-ai-boundary" aria-pressed="false" onclick="filterVideoDirectory('ai-boundary')">AI 边界与防退化</button>
+        <button type="button" class="mode-btn" id="vdir-higher-order" aria-pressed="false" onclick="filterVideoDirectory('higher-order')">高阶认知与组块建构</button>
+        <button type="button" class="mode-btn" id="vdir-ai-workflow" aria-pressed="false" onclick="filterVideoDirectory('ai-workflow')">AI 协同与深度阅读</button>
+        <button type="button" class="mode-btn" id="vdir-focus-life" aria-pressed="false" onclick="filterVideoDirectory('focus-life')">注意力管理与案例拆解</button>
+      </div>
+
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>归属主题模块</th>
+              <th>YouTube 原视频标题（Channel: Justin Sung）</th>
+              <th>提炼核心认知概念</th>
+              <th>操作（定位 / 复制搜索词）</th>
+            </tr>
+          </thead>
+          <tbody id="video-directory-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="aside-box" style="margin-bottom:var(--space-xl);">
+      <div class="dossier-bar" style="margin-bottom:var(--space-xs);">
+        <span class="dossier-meta">CURATED KNOWLEDGE ARTIFACT · BUILT FROM DR. JUSTIN SUNG TRANSCRIPTS</span>
+        <span class="dossier-meta">反认知外包实验室</span>
+      </div>
+      <p class="prose-muted" style="font-size:0.875rem;">数据来源声明：本站所有学习策略、同心圆分层模型、2-4 法则、PERO 系统、150–200 WPM 瓶颈翻转与 AI 协同决策框架，均忠实整理自提供的 Dr. Justin Sung YouTube 频道公开课程及访谈逐字稿。</p>
+    </footer>
+  </main>
+
+  <div class="inline-toast" id="toast-banner" role="status" aria-live="polite"></div>
+
+  <api-shim></api-shim>
+  <script>
+    const METHOD_ITEMS = [
+      {
+        id: `m-01`,
+        num: `01`,
+        module: `ai-boundary`,
+        moduleLabel: `AI 边界与大脑防退化`,
+        stage: `ai-guard`,
+        theme: `拒绝认知外包（Cognitive Offloading）`,
+        method: `保留“整理混乱”的痛感，禁止让 AI 直接生成总结与导图`,
+        logic: `大脑唯有通过主动的信息加工（Information Processing）筛选、排序、建网，记忆才会作为思考残留物（Residue of Thought）留下。AI 直接喂给你的结构看似清晰，其实只是“流畅感错觉”，两周后便会归零。`,
+        trap: `把复杂 PDF 丢给 LLM“三句话总结”或直接生成复习笔记，长期导致神经通路退化（研究证实即使停用 AI，认知能力仍存在残余损伤）。`,
+        videos: [`How ChatGPT Slowly Destroys Your Brain`, `Give me 28 Minutes, And I’ll Make You Learn Anything Dangerously Fast`]
+      },
+      {
+        id: `m-02`,
+        num: `02`,
+        module: `ai-boundary`,
+        moduleLabel: `AI 边界与大脑防退化`,
+        stage: `ai-guard`,
+        theme: `价值阈值上移与职业护城河`,
+        method: `主攻高情境、多因素耦合与高风险敞口的复杂判断`,
+        logic: `幻觉（Hallucinations）与缺乏情境整合能力是大语言模型的底层技术局限，而非短期算力不足。AI 接管低阶执行后，人类价值阈值大幅上移，过去占工作 20% 的复杂整合决策如今变成决定竞争力的 80%。`,
+        trap: `拼命学习各种 AI 工具提效自己原本的低阶执行任务——如果你用 AI 把 40 小时的活压缩到 10 小时且毫无不可替代的高阶判断，企业下一步就是直接用 AI 取代你。`,
+        videos: [`How to Not Get Fired (and be replaced by AI)`, `How to Think and Learn So Deeply AI Can Never Replace You`, `Why Learning Is Quietly Getting Harder`]
+      },
+      {
+        id: `m-03`,
+        num: `03`,
+        module: `ai-boundary`,
+        moduleLabel: `AI 边界与大脑防退化`,
+        stage: `ai-guard`,
+        theme: `AI 使用安全双问决策流`,
+        method: `用“是否绕过加工 + 是否显著省时”双闸门过滤每次 AI 调用`,
+        logic: `区分“AI 增强（AI-Enhanced）”与“AI 变笨（AI-Dumbed）”：若能通过自主苦思锻炼出肌肉（如想类比、抓主干），绝不用 AI；只有纯重复检索且节省极显著时间时才可调用，学习新手尤其要刻意少用 AI。`,
+        trap: `学习元认知尚未校准的初学者，因缺乏自我监测雷达，极易把“AI 替自己思考”误认为“高效学习”。`,
+        videos: [`How to Use AI Without Letting It Think for You (my full framework)`, `Why Critical Thinking Is Disappearing - The Rise of Effortless Education`]
+      },
+      {
+        id: `m-04`,
+        num: `04`,
+        module: `higher-order`,
+        moduleLabel: `高阶认知与组块建构`,
+        stage: `encoding`,
+        theme: `四层同心圆学习法（4 Layers of Learning）`,
+        method: `强制按 L1 逻辑 → L2 概念 → L3 关键细节 → L4 任意细节多轮过滤`,
+        logic: `大脑必须先知道“知识去向何处与有何用”（L1），才能评估“核心概念及因果关系”（L2），进而决定哪些细节值得保留（L3）。前三层完备即可掌握 80–90%+，彻底剥离孤立的 L4 任意细节。`,
+        trap: `顺着教科书第一页从头啃到尾（天然从 L4 细节开始），迫使大脑同时“理解+硬背+找意义”并瞬间陷入认知过载。`,
+        videos: [`4 Layers of Learning Every Student MUST Master`, `How To Finish 6 Months of Study In 72 Hours`]
+      },
+      {
+        id: `m-05`,
+        num: `05`,
+        module: `higher-order`,
+        moduleLabel: `高阶认知与组块建构`,
+        stage: `encoding`,
+        theme: `2–4 法则与工作记忆关注点分离`,
+        method: `每次提炼 3–4 个核心主干，每个主干只拆 2–4 个子观念（Separation of Concerns）`,
+        logic: `人类工作记忆（Working Memory）是极窄的瓶颈，同时操控 5 个以上未归组因子必定崩盘。先连接 2–3 个因素消除问号并打包为 1 个组块，再引入下一个变量，让知识像雪球一样滚大而不超载。`,
+        trap: `试图在第一遍阅读时就把全章十几个细节同时塞进脑子并建立交叉连线，导致大脑工作台死机。`,
+        videos: [`How To Think So Clearly People Assume You’re A Genius`, `How To Train Yourself To Be A Genius (5 Methods)`, `Private Lecture: How to Remember EVERYTHING You Read`]
+      },
+      {
+        id: `m-06`,
+        num: `06`,
+        module: `higher-order`,
+        moduleLabel: `高阶认知与组块建构`,
+        stage: `encoding`,
+        theme: `L2R2 四步信息吸收协议`,
+        method: `Layman's（白话转译）→ Layering（分层推进）→ Relevance（拼图归位）→ Real Estate（停学保护）`,
+        logic: `用日常大白话剥离生僻术语外衣；遇到卡壳的深奥段落先跳过去夯实简单骨架，第二轮带着上下文回来往往一秒顿悟；每读一段就停下来防止信息冲刷工作记忆（Stop-Start 节奏）。`,
+        trap: `卡在一个陌生术语上死磕 15 分钟不往下走，或者一口气连续听课/读文字从不暂停给大脑留出整合窗口。`,
+        videos: [`How To Absorb Everything You Read Like A Sponge`, `If You Have A Bad Memory, I’ll Help You Fix It In 28 Minutes`]
+      },
+      {
+        id: `m-07`,
+        num: `07`,
+        module: `higher-order`,
+        moduleLabel: `高阶认知与组块建构`,
+        stage: `encoding`,
+        theme: `PERO 系统与高阶思维直达（Bloom's Top 3）`,
+        method: `一接触新信息直接进行“分析异同、评估权重、创造重构”，而非先背再理解`,
+        logic: `按照 Bloom 分类法与 SOLO 分类法，你无法在完全不懂的情况下进行比较与批判——当你强迫自己去比较 A 与 B 的异同和权重时，大脑为了完成高阶指令，会自动在后台补齐低阶理解与记忆，使遗忘曲线天然拉平。`,
+        trap: `遵循“先花 80% 时间理解定义和死记硬背，最后再做综合题应用”的传统线性顺序，导致考场或实操全面崩盘。`,
+        videos: [`7 Years of Building a Learning System in 12 minutes`, `Study More Efficiently With These 2 Basic Steps`, `Why 90% of Students Never IMPROVE | Study Clinic`]
+      },
+      {
+        id: `m-08`,
+        num: `08`,
+        module: `higher-order`,
+        moduleLabel: `高阶认知与组块建构`,
+        stage: `encoding`,
+        theme: `空间语义导图与套索重构（Lasso Protocol）`,
+        method: `用空间距离/分区代表概念亲疏，并用套索工具随时拖拽重写排版`,
+        logic: `好导图的纸面布局就是大脑认知架构的直接投射。信息是动态流入的，刚听课时不可能一次放对位置；持续用套索移动节点、重划箭头，逼迫大脑重新评估因果优先级。`,
+        trap: `把思维导图画成漂亮的放射状目录树或线性抄写搬家，从头到尾一个节点都没移动过——这是典型的“伪装努力”。`,
+        videos: [`Are Mind Maps a WASTE OF TIME?`, `6 Protocols to UPGRADE iPad Note-Taking (according to research)`, `This One Mistake Made his Mindmap Useless`]
+      },
+      {
+        id: `m-09`,
+        num: `09`,
+        module: `higher-order`,
+        moduleLabel: `高阶认知与组块建构`,
+        stage: `encoding`,
+        theme: `技术“治疗指数”与 Anki 主动修剪`,
+        method: `仅将 Anki 用于 Layer 3–4 任意细节，并定期主动删除/合并已内化卡片`,
+        logic: `每种工具都有其有效“治疗窗”（Therapeutic Index）。过度依赖抽认卡（Spaced Repetition / Active Recall）会制造孤立记忆碎片；一旦概念融入 L1–L2 网络，应果断修剪掉冗余卡片以释放复习时间。`,
+        trap: `用 Anki 强行记忆底层大框架和因果原理，或者只加卡不删卡导致每日复习队列雪崩到上千张。`,
+        videos: [`10,000 Hours of No-BS Study Advice in 14 Minutes`, `The PROBLEM with Active Recall and Spaced Repetition`, `How to use Anki like a PRO (by a Learning Expert)`]
+      },
+      {
+        id: `m-10`,
+        num: `10`,
+        module: `ai-workflow`,
+        moduleLabel: `AI 协同实战工作流`,
+        stage: `ai-guard`,
+        theme: `AI“关键词补盲”与反例审问官流`,
+        method: `先手绘初版框架，再让 AI 仅输出“被忽略分支的关键词”与“反驳角度”`,
+        logic: `这相当于把原本需要自己搜几十篇资料才能发现的视野盲区交给 AI 检索（极度省时），但仍把“理解新词、判断如何接入现有框架”的黄金认知加工权牢牢攥在自己手里。`,
+        trap: `在自己脑子还是一片空白时，就让 AI 帮你写出“零基础全面入门指南”，直接剥夺了自建图式的机会。`,
+        videos: [`Helping a Professional Learn Faster - Private Coaching Call`, `How to Learn FASTER using AI (without damaging your brain)`]
+      },
+      {
+        id: `m-11`,
+        num: `11`,
+        module: `ai-workflow`,
+        moduleLabel: `AI 协同实战工作流`,
+        stage: `reading`,
+        theme: `150–200 WPM 瓶颈翻转与批判阅读`,
+        method: `L3–L4 学术阅读执行 Question & Critique（每读完一概念停下发问批判）`,
+        logic: `字面阅读阶段瓶颈是眼速；一旦达到 150–200 WPM 并进入专业与大学所需的批判/迁移理解（L3–L4），瓶颈立刻翻转为“大脑理解速度”。慢下来问“作者凭什么这么写？与已知何处冲突？”，反而比读 6 遍快得多。`,
+        trap: `盲目练习消默读速读（500–1000 WPM）啃专业教材，结果眼珠扫完了全书，脑子里没留下一条可用逻辑。`,
+        videos: [`How to Read Anything Faster Than Everyone Else`, `If You Want To Learn Faster, Please Watch This Video...`]
+      },
+      {
+        id: `m-12`,
+        num: `12`,
+        module: `ai-workflow`,
+        moduleLabel: `AI 协同实战工作流`,
+        stage: `reading`,
+        theme: `防疲劳视觉分组阅读 & 纸质低摩擦回归`,
+        method: `放松视线扩宽视锥、收窄屏幕至 45–70 字符、重要精读回归纸张快速前后翻页`,
+        logic: `高度紧绷阅读会使瞳孔收缩、视觉焦点变窄；以“分组疾跑 + 思考停顿”取代匀速平推能极大节省体力。纸质版允许手指夹页、一秒前后对照联想，这在电子阅读器上存在致命的检索摩擦。`,
+        trap: `全屏超宽排版逐行硬扫 2 小时不停歇，或全靠电子阅读器线性往后翻页导致无法随时回溯建立跨章节联系。`,
+        videos: [`4 Steps to Read Difficult Texts Faster (Academic Speed Reading Comprehension)`, `The top 1% Learn From Paper. Here’s Why.`]
+      },
+      {
+        id: `m-13`,
+        num: `13`,
+        module: `ai-workflow`,
+        moduleLabel: `AI 协同实战工作流`,
+        stage: `reading`,
+        theme: `多源同主题横读（Syntopical Reading）与主动重构`,
+        method: `先收集 20–30 份材料筛出 5–10 份核心来源同步交叉阅读 + Active Reframe`,
+        logic: `单一文本自带作者的视角局限（Silo）。同时横读多方材料并追问“有没有完全相反的组织逻辑？”（Active Reframe），能迫使大脑跳出单一模板，迅速形成全景且高容错的专家网络。`,
+        trap: `盯着一本书或一个课程逐章吃透再去读第二本，导致前几个月脑子里全是单一视角的偏见与盲区。`,
+        videos: [`How to Unlock Your Memory Potential`, `How to READ so that you ACTUALLY RETAIN Information (Live Lecture)`]
+      },
+      {
+        id: `m-14`,
+        num: `14`,
+        module: `focus-life`,
+        moduleLabel: `注意力节律与案例元认知`,
+        stage: `energy`,
+        theme: `50% 专注阈值定律与 52/17 工作节律`,
+        method: `一旦感觉“同句话读两遍才进脑”，立刻停下休整；用 52/17 取代死板番茄钟`,
+        logic: `注意力在 50% 阈值以上是正常消耗，跌破 50% 后不仅效率断崖，还会对大脑形成“不专注也能工作”的负向经典条件反射。且 52 分钟更适合深潜建网，17 分钟足以真正脱离并恢复带宽。`,
+        trap: `用固定 25/5 番茄钟在深度思考刚进入心流时强行打断，或者疲惫卡顿时靠意志力硬磨 2 小时。`,
+        videos: [`3-Point Checklist to Create Focus On Demand | Study Clinic`, `E2: A Smarter Way to Work (BETTER than Pomodoro)`]
+      },
+      {
+        id: `m-15`,
+        num: `15`,
+        module: `focus-life`,
+        moduleLabel: `注意力节律与案例元认知`,
+        stage: `energy`,
+        theme: `反论题习惯（Anti-thesis）与破除“Commit or Quit”`,
+        method: `做任何重要判断同时写出“满足哪 3 个条件我就推翻/调整此决定”`,
+        logic: `打破非黑即白的“死磕或放弃”二元有毒心态，体现高阶认知灵活性（Cognitive Flexibility）；同时前置处理需等待他人反馈的邮件/预约（Unblock Your Future Self），避免日后被动干等。`,
+        trap: `把时间表排成 5 分钟颗粒度的死板机器，对突发干扰充满焦虑，或在错误路径上盲目自我感动式死磕。`,
+        videos: [`5 Thinking Habits That Make You Look Smarter`, `"Commit or Quit" is Toxic | E6 Bigger Plate`, `13 Years of No BS Productivity Advice in 67 Minutes`]
+      },
+      {
+        id: `m-16`,
+        num: `16`,
+        module: `focus-life`,
+        moduleLabel: `注意力节律与案例元认知`,
+        stage: `energy`,
+        theme: `“赢下这周”与把学习债务转为学习资产`,
+        method: `每晚预留 10–60 分钟 Wind-down 睡前清零 + 前置投入构建高复利知识网络`,
+        logic: `把成就感押注在“榨干每一天最后一分钟”会毁掉睡眠与次日效率，形成慢性透支。今天偷懒省略深思考（或外包给 AI）省下的时间，会变成未来几周痛苦返工的“学习债务”；前期投入认知摩擦打造的网络，才是持续复利的“学习资产”。`,
+        trap: `为了追求当天“看似学完 5 章”的虚假满足感压缩睡眠并跳过编码，结果下周花三倍时间重新返工。`,
+        videos: [`7 Things I Did To Stop Wasting My Evenings After Work`, `How to Rest So Well You Never Feel Exhausted Again`, `How To Think Like The Top 1%`]
+      }
+    ];
+
+    const VIDEO_CATALOG = [
+      { title: `How to Use AI Without Letting It Think for You (my full framework)`, module: `ai-boundary`, concept: `AI 安全双问决策流：加工是否被绕过？时间是否显著节省？Pre-mortem 事前验尸` },
+      { title: `How ChatGPT Slowly Destroys Your Brain`, module: `ai-boundary`, concept: `LLM 残余认知退化效应、流畅感错觉与信息加工黄金步骤` },
+      { title: `How to Not Get Fired (and be replaced by AI)`, module: `ai-boundary`, concept: `价值阈值上移（Threshold of Valuable Expertise）、技术本质局限（幻觉）vs 能力局限` },
+      { title: `How to Think and Learn So Deeply AI Can Never Replace You`, module: `ai-boundary`, concept: `高情境、多因素耦合、高风险敞口问题与人类天然脑硬件优势` },
+      { title: `Why Learning Is Quietly Getting Harder`, module: `ai-boundary`, concept: `复杂决策从工作占比 20% 飙升至 80%，人类成为最后的核心瓶颈` },
+      { title: `Why Critical Thinking Is Disappearing - The Rise of Effortless Education`, module: `ai-boundary`, concept: `零摩擦教育陷阱与正向强化习惯形成机制` },
+      { title: `Give me 28 Minutes, And I’ll Make You Learn Anything Dangerously Fast`, module: `ai-boundary`, concept: `把整理工作交给 AI 导致记忆无法留存的心理机制` },
+      { title: `How to Learn FASTER using AI (without damaging your brain)`, module: `ai-workflow`, concept: `用 Bloom 高阶三层作为防依赖检查清单` },
+      { title: `How to Learn FASTER With AI - Google NotebookLM`, module: `ai-workflow`, concept: `通勤语音交互与防止“承诺捷径”误导初学者` },
+      { title: `Helping a Professional Learn Faster - Private Coaching Call`, module: `ai-workflow`, concept: `Julian 案例：先手绘全局再让 AI 扫描被忽略分支的关键词` },
+      { title: `4 Layers of Learning Every Student MUST Master`, module: `higher-order`, concept: `L1 逻辑层 → L2 概念层 → L3 重要细节 → L4 任意细节的逆向陷阱与正序过滤` },
+      { title: `How To Absorb Everything You Read Like A Sponge`, module: `higher-order`, concept: `L2R2 四步法（通俗转译、分层推进、拼图归位、工作台保护）` },
+      { title: `How To Think So Clearly People Assume You’re A Genius`, module: `higher-order`, concept: `工作记忆容量限制与关注点分离（Separation of Concerns）` },
+      { title: `How To Train Yourself To Be A Genius (5 Methods)`, module: `higher-order`, concept: `2–4 法则：先提炼 3–4 个主干，再逐层拆出 2–4 个子概念` },
+      { title: `7 Years of Building a Learning System in 12 minutes`, module: `higher-order`, concept: `PERO 学习系统（Priming-Encoding-Reference-Overlearning）` },
+      { title: `10,000 Hours of No-BS Study Advice in 14 Minutes`, module: `higher-order`, concept: `学习技术的“治疗指数（Therapeutic Index）”与学习资产 vs 学习债务` },
+      { title: `The PROBLEM with Active Recall and Spaced Repetition`, module: `higher-order`, concept: `编码优于检索：为何依赖抽认卡无法应对高阶整合考试` },
+      { title: `How to use Anki like a PRO (by a Learning Expert)`, module: `higher-order`, concept: `Anki 的精准定位（Layer 3–4）与主动修剪废卡（Pruning）` },
+      { title: `Are Mind Maps a WASTE OF TIME?`, module: `higher-order`, concept: `好导图反映人类认知架构，坏导图只是装饰性笔记` },
+      { title: `6 Protocols to UPGRADE iPad Note-Taking (according to research)`, module: `higher-order`, concept: `套索工具（Lasso Tool）动态拖拽重组节点位置的必要性` },
+      { title: `This One Mistake Made his Mindmap Useless`, module: `higher-order`, concept: `不经重构与优先级梳理的静态导图留存率为零` },
+      { title: `Study More Efficiently With These 2 Basic Steps`, module: `higher-order`, concept: `直接向 Bloom 高阶目标发力，倒逼大脑自动补齐低阶理解` },
+      { title: `Why 90% of Students Never IMPROVE | Study Clinic`, module: `higher-order`, concept: `SOLO 分类法五级跃迁与主动逻辑建构` },
+      { title: `How to Read Anything Faster Than Everyone Else`, module: `ai-workflow`, concept: `四级理解与 150–200 WPM 瓶颈翻转、Question & Critique 批判阅读` },
+      { title: `4 Steps to Read Difficult Texts Faster (Academic Speed Reading Comprehension)`, module: `ai-workflow`, concept: `视锥放松与视觉分组疾跑（Grouping & Sprinting）` },
+      { title: `The top 1% Learn From Paper. Here’s Why.`, module: `ai-workflow`, concept: `45–70 字符窄窗口与纸质版超低摩擦前后对照翻页` },
+      { title: `How to Unlock Your Memory Potential`, module: `ai-workflow`, concept: `Syntopical Reading（5–10 份核心来源同主题交叉横读）` },
+      { title: `How to READ so that you ACTUALLY RETAIN Information (Live Lecture)`, module: `ai-workflow`, concept: `黄金认知负载带（Goldilocks Zone）与 Active Reframe 主动重构` },
+      { title: `3-Point Checklist to Create Focus On Demand | Study Clinic`, module: `focus-life`, concept: `50% 专注阈值定律与防止负向条件反射` },
+      { title: `E2: A Smarter Way to Work (BETTER than Pomodoro)`, module: `focus-life`, concept: `52/17 深度工作节律优于机械 25/5 番茄钟` },
+      { title: `5 Thinking Habits That Make You Look Smarter`, module: `focus-life`, concept: `Anti-thesis 反论题思维与显性展示推翻条件` },
+      { title: `How To Train Yourself To Have An Exceptional Memory`, module: `focus-life`, concept: `百页 dense 教材 >90% 留存案例与网络化记忆轨迹` },
+      { title: `Learn To Learn in 109 minutes`, module: `focus-life`, concept: `医院高压工作兼顾创业及 Monash 硕士排名第一的系统进化` },
+      { title: `7 Things I Did To Stop Wasting My Evenings After Work`, module: `focus-life`, concept: `Win the Week（赢下这一周）与 Wind-down 睡前程序` },
+      { title: `"Commit or Quit" is Toxic | E6 Bigger Plate`, module: `focus-life`, concept: `跳出“死磕到底或彻底放弃”的二元有毒思维` },
+      { title: `How To Think Like The Top 1%`, module: `focus-life`, concept: `奥卡姆剃刀、反脆弱（Anti-comfort）与战略性延迟不适` },
+      { title: `13 Years of No BS Productivity Advice in 67 Minutes`, module: `focus-life`, concept: `Unblock Your Future Self 与“吃掉青蛙”拆解规划核心` },
+      { title: `How to Rest So Well You Never Feel Exhausted Again`, module: `focus-life`, concept: `Sonnentag 四维恢复法：放松、心理抽离、掌控感、自主控制` },
+      { title: `Can AI Help Me Learn Faster? (DALL E 2)`, module: `focus-life`, concept: `用 1–2 小时编码 70–100 个医学症状视觉互锁场景案例` },
+      { title: `How To Change Your Life In 2025 (with Reverse Goal Setting)`, module: `focus-life`, concept: `60–70h 临床轮班与逆向目标设定实录` },
+      { title: `How To Finish 6 Months of Study In 72 Hours`, module: `higher-order`, concept: `三阶段冲刺法：先高逻辑点、再中逻辑点、最后清扫记忆碎片` },
+      { title: `If You Want To Learn Faster, Please Watch This Video...`, module: `ai-workflow`, concept: `“追求速度”为何反而让你学得更慢（侦探片幻觉）` },
+      { title: `If You Have A Bad Memory, I’ll Help You Fix It In 28 Minutes`, module: `higher-order`, concept: `Stop-Start 停学交替防止工作记忆超载` }
+    ];
+
+    const LAYER_DATA = {
+      1: {
+        badge: `LAYER 1 · 地基内核`,
+        title: `L1 逻辑层（Logic Layer）：一切知识生长的意图与骨架`,
+        desc: `解决“为什么要学这个主题？它在真实世界解决什么问题？核心因果主线是什么？”。如果跳过 L1，大脑无法判断后续任何细节的优先级，越学越感觉只是在堆砌文字。`,
+        action: `第一遍速览整章标题、图表与结论，刻意忽略陌生术语，用 2–4 法则只提炼 3–4 个最核心的因果主干。`
+      },
+      2: {
+        badge: `LAYER 2 · 关系网络`,
+        title: `L2 概念层（Concepts Layer）：全流程耗时最长但回报最高`,
+        desc: `在 L1 骨架上填充核心概念，并明确它们之间的比较关系（谁制约谁、谁是谁的特例、哪个权重更高）。这一层耗时最长，但决定了你的知识能否用于真实问题解决。`,
+        action: `使用空间语义导图与套索工具不断调整节点位置，主动追问概念之间的相似点、差异点与因果流向。`
+      },
+      3: {
+        badge: `LAYER 3 · 具象支撑`,
+        title: `L3 重要细节层（Important Details）：80–90%+ 高分掌握线`,
+        desc: `用来让 L2 概念落地的特定术语、机制参数与证据。当你完整贯通 L1→L2→L3 时，对一门学科或技能的掌握度与考试成绩通常已稳居 80–90%+ 以上。`,
+        action: `针对高权重细节建立联系，仅对孤立但高频的关键细节配合高质量抽认卡或视觉交互记忆辅助。`
+      },
+      4: {
+        badge: `LAYER 4 · 任意细节陷阱`,
+        title: `L4 任意细节层（Arbitrary Details）：如果不考就完全不必记的边角料`,
+        desc: `无法助你理解大局、跟其他概念缺乏因果逻辑关联的零散事实。致命之处在于：你只有先搞懂 L1–L3，才能看清哪些属于 L4；教科书正文章节却偏偏把大量 L4 塞在最前面。`,
+        action: `前两轮扫描直接战略性跳过 L4；确认非考不可时，放到冲刺最后阶段用 Anki 集中收尾，并考后主动修剪。`
+      }
+    };
+
+    const SYMPTOMS = {
+      ai: {
+        trap: `认知外包与流畅感错觉（Cognitive Bypassing）`,
+        rx: `立即执行“先手绘初版骨架，再让 AI 做关键词盲区扫描”。强迫自己保留整理混乱的 15 分钟痛感，并开启下方“挣得答案”阻尼练习。`,
+        target: `sec-friction`,
+        videos: [`How ChatGPT Slowly Destroys Your Brain`, `How to Use AI Without Letting It Think for You (my full framework)`]
+      },
+      overload: {
+        trap: `线性倒序陷阱（从 Layer 4 细节硬啃导致工作记忆崩盘）`,
+        rx: `启用“同心圆分层阅读（L1→L3）”与“2–4 法则”：第一遍只抓全章 3–4 个大逻辑问题，遇到卡壳的陌生术语按 L2R2 协议直接跳过，第二轮带着上下文再回来。`,
+        target: `sec-sandbox`,
+        videos: [`4 Layers of Learning Every Student MUST Master`, `How To Absorb Everything You Read Like A Sponge`]
+      },
+      anki: {
+        trap: `学习技术“过量中毒”（把 Layer 3–4 工具误用于 Layer 1–2 逻辑）`,
+        rx: `将重心从 Retrieval 抽认卡拉回 Encoding 深度编码：停掉 50% 盲目制卡时间，改用空间导图比较概念异同（Bloom 高阶三层），并定期修剪冗余旧卡。`,
+        target: `sec-pillars`,
+        videos: [`10,000 Hours of No-BS Study Advice in 14 Minutes`, `How to use Anki like a PRO (by a Learning Expert)`]
+      },
+      burnout: {
+        trap: `跌破 50% 专注阈值仍硬撑 + 150–200 WPM 瓶颈翻转失察`,
+        rx: `一旦发现同一句话读两遍才进脑，立刻停下休息防止负向条件反射；将 25/5 换为 52/17 节律，并用 Question & Critique 提问法主动减慢眼速、提升思考密度。`,
+        target: `sec-matrix`,
+        videos: [`3-Point Checklist to Create Focus On Demand | Study Clinic`, `How to Read Anything Faster Than Everyone Else`]
+      }
+    };
+
+    const FRICTION_SCENARIOS = [
+      {
+        title: `你刚接手一个完全陌生的 AI 多智能体（Multi-Agent）架构项目，周五前要给出技术选型方案。`,
+        body: `手头有 40 份零散博客、文档和论文。最省事的做法是把它们全喂给大模型，让 AI 生成一份“Multi-Agent 框架对比表与推荐结论”。`,
+        question: `如果禁止 AI 替你做总结，按照 Justin Sung 的“底层专家视角 + 2–4 法则”，你前 20 分钟应该先在白纸上追问哪 2–3 个核心决定变量？`,
+        trapOut: `你直接拿到了 AI 漂亮的表格，在周会上念得头头是道。但老板一旦追问“如果工作流延迟突增或某个工具静默失败，架构该怎么降级？”，你当场卡壳——因为你跳过信息加工，对系统耦合风险毫无心理图式，两周后连表格内容也会忘光。`,
+        earnedOut: `Justin Sung 方案（Julian 案例原型）：先自己推演“只要搞懂哪几个底层机制（如：状态持久化、失败回退机制、上下文膨胀成本），我就能自己看懂所有框架？”先手绘出这 3 个核心主干及权衡关系，再让 AI 充当“关键词扫描器”，只提示你草图里遗漏的技术盲区词与 Anti-thesis 失败条件（Pre-mortem）。`
+      },
+      {
+        title: `考研/专业认证前，面前是一本 30 页极晦涩的跨学科研究论文或医学章节，读第 2 页就觉得满屏生词、脑子发紧。`,
+        body: `传统高分学霸的做法是：开着荧光笔，从第一段开始查完每一个生词、在页边抄满批注，确保这一页 100% 看懂再翻下一页。`,
+        question: `为什么“每一段都看懂再往下走”反而导致 2 小时后全盘崩溃？按 L2R2 与 4 Layers，你第一步该刻意“跳过”什么？`,
+        trapOut: `你把整整 1.5 小时耗在了前 4 页的 L4 细节与孤立术语上。到了第 5 页，工作记忆早已超过 4–5 个孤立要素的极限而发生过载，整篇论文在你脑海里依然是一盘散沙，最终产生“我是不是不够聪明”的习得性无助。`,
+        earnedOut: `Justin Sung 方案：启动 L2R2 + 4 Layers 过滤！第一遍用 Layman's 通俗语言速览全篇大小标题、首尾段与图表，刻意跳过所有生僻术语和细节，先拼出 L1 逻辑拼图框。第二轮带着全局目的回到之前卡住的段落，80% 的“难点”会因语境补齐而瞬间看懂；且纸质打印更利于前后 1 秒翻页对比。`
+      },
+      {
+        title: `你用 Anki 坚持打卡半年，累计背了 4000 张卡片，单项名词题几乎秒杀，但模拟考一遇到跨章节综合应用题就大面积丢分。`,
+        body: `看着每天上涨的复习数字很有成就感，于是你决定把错题全部再做成新的 Anki 卡片，每天刷卡时间从 1 小时加码到 2.5 小时。`,
+        question: `为什么“加倍刷抽认卡”在这里相当于“药物过量中毒”？你真正缺失的是 PERO 系统中的哪一步加工？`,
+        trapOut: `你的大脑被训练成了“孤立线索触发器”——看到 A 能反射出 B，但不知道 A 与 C、D 在真实场景下谁优先级更高、互为什么因果。继续堆卡片只会把复习队列膨胀到崩溃，严重挤占建立高层网络的宝贵时间。`,
+        earnedOut: `Justin Sung 方案（Therapeutic Index 治疗窗法则）：立即把 Anki 降级为仅处理 Layer 3–4 任意细节的收尾工具，并主动修剪（Pruning）已融入体系的废卡。把腾出的时间投入 PERO 的“E（深度编码）”：强制用一张空间语义导图把 4 个易混章节的机制放一起，用套索反复排布对比异同，直达 Bloom 高阶分析与评估。`
+      }
+    ];
+
+    /* State object persisted via notebookAppApi */
+    let appState = {
+      selectedSymptom: null,
+      layerOrderMode: `sung`,
+      activeLayer: 1,
+      wmFactors: [`核心目的`, `关键因果`, `边界条件`],
+      wmChunked: false,
+      activeVideoFilter: null,
+      earnedCount: 0,
+      unlockedScenarios: [],
+      scenarioNotes: {}
+    };
+
+    const DEFAULT_FACTORS = [`核心目的`, `关键因果`, `边界条件`, `机制参数`, `特例反例`, `衍生术语`, `历史背景`, `边缘细节`];
+
+    function showToast(msg) {
+      const el = document.getElementById(`toast-banner`);
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add(`is-visible`);
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(function() {
+        el.classList.remove(`is-visible`);
+      }, 2800);
+    }
+
+    async function persistState() {
+      updateProgressBadge();
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (e) {
+          /* ignore sandbox errors */
+        }
+      }
+    }
+
+    function updateProgressBadge() {
+      const badge = document.getElementById(`user-progress-badge`);
+      if (!badge) return;
+      const diagText = appState.selectedSymptom ? `已诊断` : `未激活`;
+      badge.textContent = `已挣得答案: ${appState.earnedCount} 次 · 诊断: ${diagText}`;
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: `smooth`, block: `start` });
+      }
+    }
+
+    /* Diagnostic Entry */
+    function selectSymptom(key) {
+      appState.selectedSymptom = key;
+      const keys = [`ai`, `overload`, `anki`, `burnout`];
+      keys.forEach(function(k) {
+        const btn = document.getElementById(`sym-${k}`);
+        if (btn) btn.setAttribute(`aria-pressed`, k === key ? `true` : `false`);
+      });
+
+      const data = SYMPTOMS[key];
+      const out = document.getElementById(`diagnostic-result`);
+      if (!data || !out) return;
+
+      let chipsHtml = data.videos.map(function(v) {
+        return `<button type="button" class="video-chip" onclick="openVideoSource('${v.replace(/'/g, `\\'`)}')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>${v}</button>`;
+      }).join(``);
+
+      out.innerHTML = `
+        <div class="block-kicker block-kicker--trap">诊断病灶：${data.trap}</div>
+        <p style="margin:var(--space-xs) 0; font-size:0.9375rem;"><strong>认知处方：</strong>${data.rx}</p>
+        <div style="display:flex; flex-wrap:wrap; gap:var(--space-sm); margin-top:var(--space-sm); align-items:center;">
+          <button type="button" class="btn btn--teal" onclick="scrollToSection('${data.target}')">直达对口实验模块</button>
+        </div>
+        <div class="source-chip-row" style="margin-top:var(--space-sm);">${chipsHtml}</div>
+      `;
+      if (window.lucide) window.lucide.createIcons();
+      persistState();
+    }
+
+    /* Concentric Layers Sandbox */
+    function setLayerOrderMode(mode) {
+      appState.layerOrderMode = mode;
+      const sungBtn = document.getElementById(`path-sung`);
+      const linBtn = document.getElementById(`path-linear`);
+      if (sungBtn) sungBtn.setAttribute(`aria-pressed`, mode === `sung` ? `true` : `false`);
+      if (linBtn) linBtn.setAttribute(`aria-pressed`, mode === `linear` ? `true` : `false`);
+
+      const dirLabel = document.getElementById(`svg-dir-label`);
+      const dirLine = document.querySelector(`#svg-direction-indicator line`);
+      const dirPoly = document.querySelector(`#svg-direction-indicator polygon`);
+      const dirRect = document.querySelector(`#svg-direction-indicator rect`);
+
+      if (mode === `sung`) {
+        if (dirLabel) dirLabel.textContent = `正序扫描：由内向外逐轮过滤`;
+        if (dirLine) dirLine.setAttribute(`stroke`, `var(--primary)`);
+        if (dirPoly) {
+          dirPoly.setAttribute(`fill`, `var(--primary)`);
+          dirPoly.setAttribute(`points`, `230,362 224,350 236,350`);
+        }
+        if (dirRect) dirRect.setAttribute(`fill`, `var(--primary)`);
+        inspectLayer(1);
+      } else {
+        if (dirLabel) dirLabel.textContent = `倒序陷阱：外层细节直接淹没大脑`;
+        if (dirLine) dirLine.setAttribute(`stroke`, `var(--error)`);
+        if (dirPoly) {
+          dirPoly.setAttribute(`fill`, `var(--error)`);
+          dirPoly.setAttribute(`points`, `230,245 224,257 236,257`);
+        }
+        if (dirRect) dirRect.setAttribute(`fill`, `var(--error)`);
+        inspectLayer(4);
+      }
+      persistState();
+    }
+
+    function inspectLayer(num) {
+      appState.activeLayer = num;
+      const d = LAYER_DATA[num];
+      if (!d) return;
+
+      const badge = document.getElementById(`layer-badge`);
+      const title = document.getElementById(`layer-title`);
+      const desc = document.getElementById(`layer-desc`);
+      const action = document.getElementById(`layer-action`);
+
+      if (badge) {
+        badge.textContent = d.badge;
+        badge.className = num === 4 ? `dossier-pill dossier-pill--trap` : (num === 2 ? `dossier-pill dossier-pill--secondary` : (num === 3 ? `dossier-pill` : `dossier-pill dossier-pill--primary`));
+      }
+      if (title) title.textContent = d.title;
+      if (desc) desc.textContent = d.desc;
+      if (action) action.textContent = d.action;
+
+      [1, 2, 3, 4].forEach(function(i) {
+        const ring = document.getElementById(`ring-${i}`);
+        if (ring) {
+          ring.setAttribute(`stroke-width`, i === num ? `4` : (i === 4 ? `2` : `2.5`));
+          ring.setAttribute(`opacity`, i === num ? `1` : `0.78`);
+        }
+      });
+      persistState();
+    }
+
+    /* 2-4 Rule Working Memory Simulator */
+    function renderWmBench() {
+      const wrap = document.getElementById(`wm-tokens-wrap`);
+      const fill = document.getElementById(`wm-meter-fill`);
+      const aria = document.getElementById(`wm-progress-aria`);
+      const badge = document.getElementById(`wm-status-badge`);
+      const fb = document.getElementById(`wm-feedback`);
+      if (!wrap || !fill || !badge || !fb) return;
+
+      const count = appState.wmFactors.length;
+      const isOverload = !appState.wmChunked && count >= 5;
+      const pct = appState.wmChunked ? 35 : Math.min(100, count * 16);
+
+      fill.style.width = `${pct}%`;
+      if (aria) aria.setAttribute(`aria-valuenow`, String(pct));
+
+      if (appState.wmChunked) {
+        fill.style.backgroundColor = `var(--secondary)`;
+        badge.textContent = `状态：已打包为 2–4 组块（高稳态）`;
+        badge.style.color = `var(--secondary)`;
+        fb.textContent = `组块完成！原本散落的要素被归并成高级父组块，工作记忆重获 65% 空余带宽，可以引入下一轮新内容了。`;
+      } else if (isOverload) {
+        fill.style.backgroundColor = `var(--error)`;
+        badge.textContent = `状态：工作记忆过载 (${count} 个未归组要素)`;
+        badge.style.color = `var(--trap-text)`;
+        fb.textContent = `警告：同时处理 ${count} 个孤立要素已触发 Cognitive Overload！不要硬塞下一个，请立即点击“执行 2–4 组块归并”。`;
+      } else {
+        fill.style.backgroundColor = count >= 2 ? `var(--load-accent)` : `var(--primary)`;
+        badge.textContent = count >= 2 ? `状态：良性认知负载 (${count} 要素)` : `状态：负载偏低 (${count} 要素)`;
+        badge.style.color = count >= 2 ? `var(--tertiary)` : `var(--primary)`;
+        fb.textContent = count >= 2 ? `处于 2–4 法则黄金区间！大脑有足够带宽深度比较这 ${count} 个要素之间的因果关系。` : `负载过轻，再引入 1–2 个核心要素进行对比。`;
+      }
+
+      wrap.innerHTML = appState.wmFactors.map(function(f) {
+        const cls = appState.wmChunked ? `wm-chip wm-chip--chunked` : (isOverload ? `wm-chip wm-chip--overload` : `wm-chip`);
+        return `<span class="${cls}">${f}</span>`;
+      }).join(``);
+    }
+
+    function wmAddFactor() {
+      if (appState.wmChunked) {
+        appState.wmChunked = false;
+      }
+      if (appState.wmFactors.length >= 8) {
+        showToast(`工作台已达演示上限（8 个要素），请先执行 2–4 组块归并！`);
+        return;
+      }
+      const nextLabel = DEFAULT_FACTORS[appState.wmFactors.length] || `变量 #${appState.wmFactors.length + 1}`;
+      appState.wmFactors.push(nextLabel);
+      renderWmBench();
+      persistState();
+    }
+
+    function wmChunkFactors() {
+      if (appState.wmFactors.length <= 1) {
+        showToast(`至少需要 2 个要素才需要执行组块归并。`);
+        return;
+      }
+      appState.wmFactors = [
+        `[组块 A] ${appState.wmFactors.slice(0, Math.ceil(appState.wmFactors.length / 2)).join(` + `)}`,
+        `[组块 B] ${appState.wmFactors.slice(Math.ceil(appState.wmFactors.length / 2)).join(` + `)}`
+      ];
+      appState.wmChunked = true;
+      renderWmBench();
+      persistState();
+    }
+
+    function wmResetFactors() {
+      appState.wmFactors = [`核心目的`, `关键因果`, `边界条件`];
+      appState.wmChunked = false;
+      renderWmBench();
+      persistState();
+    }
+
+    /* Curated Matrix Filtering & Rendering */
+    function applyMatrixFilters() {
+      const searchEl = document.getElementById(`filter-search`);
+      const modEl = document.getElementById(`filter-module`);
+      const stageEl = document.getElementById(`filter-stage`);
+      const container = document.getElementById(`matrix-cards-container`);
+      const countLabel = document.getElementById(`matrix-count-label`);
+
+      if (!container) return;
+
+      const q = (searchEl ? searchEl.value : ``).trim().toLowerCase();
+      const mod = modEl ? modEl.value : `all`;
+      const stg = stageEl ? stageEl.value : `all`;
+      const vFilter = appState.activeVideoFilter;
+
+      const filtered = METHOD_ITEMS.filter(function(item) {
+        const matchMod = mod === `all` || item.module === mod;
+        const matchStg = stg === `all` || item.stage === stg;
+        const matchVid = !vFilter || item.videos.indexOf(vFilter) !== -1;
+        const hay = `${item.theme} ${item.method} ${item.logic} ${item.trap} ${item.moduleLabel} ${item.videos.join(` `)}`.toLowerCase();
+        const matchQ = !q || hay.indexOf(q) !== -1;
+        return matchMod && matchStg && matchVid && matchQ;
+      });
+
+      if (countLabel) {
+        countLabel.textContent = `显示 ${filtered.length} / ${METHOD_ITEMS.length} 个核心方法单元`;
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="figure-card" style="grid-column:1/-1; text-align:center; padding:var(--space-xl);">
+            <p class="subhead">未找到匹配的学习方法单元</p>
+            <p class="prose-muted" style="margin:var(--space-xs) auto var(--space-md) auto;">当前筛选条件下无匹配条目，可清空搜索词或重置视频筛选条件。</p>
+            <button type="button" class="btn btn--secondary" onclick="resetMatrixFilters()">显示全部 16 个方法单元</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(function(item) {
+        const isHl = vFilter && item.videos.indexOf(vFilter) !== -1;
+        const chips = item.videos.map(function(v) {
+          const activeCls = vFilter === v ? `video-chip video-chip--active` : `video-chip`;
+          const safeV = v.replace(/'/g, `\\'`);
+          return `<button type="button" class="${activeCls}" onclick="openVideoSource('${safeV}')"><i data-lucide="play-circle" width="14" height="14" aria-hidden="true"></i>${v}</button>`;
+        }).join(``);
+
+        return `
+          <article class="method-card ${isHl ? `method-card--highlighted` : ``}">
+            <div class="method-card-head">
+              <span class="index-num">UNIT ${item.num} · ${item.moduleLabel}</span>
+              <span class="dossier-meta">${item.theme}</span>
+            </div>
+            <div class="method-block">
+              <div class="block-kicker">具体学习方法 · ACTIONABLE METHOD</div>
+              <h3 class="subhead">${item.method}</h3>
+            </div>
+            <div class="method-block">
+              <div class="block-kicker block-kicker--teal">底层思路与认知逻辑 · COGNITIVE LOGIC</div>
+              <p class="prose" style="font-size:0.9375rem;">${item.logic}</p>
+            </div>
+            <div class="trap-strip">
+              <div class="block-kicker block-kicker--trap" style="margin-bottom:2px;">认知陷阱警示 · TRAP WARNING</div>
+              <span>${item.trap}</span>
+            </div>
+            <div class="source-chip-row">${chips}</div>
+          </article>
+        `;
+      }).join(``);
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function resetMatrixFilters() {
+      const s = document.getElementById(`filter-search`);
+      const m = document.getElementById(`filter-module`);
+      const st = document.getElementById(`filter-stage`);
+      if (s) s.value = ``;
+      if (m) m.value = `all`;
+      if (st) st.value = `all`;
+      clearVideoFilter();
+    }
+
+    function clearVideoFilter() {
+      appState.activeVideoFilter = null;
+      const note = document.getElementById(`active-video-filter-note`);
+      const clrBtn = document.getElementById(`clear-video-filter-btn`);
+      if (note) note.textContent = `当前未锁定特定视频来源（点击卡片底部任一视频徽章可精准溯源）`;
+      if (clrBtn) clrBtn.classList.add(`hidden-panel`);
+      applyMatrixFilters();
+    }
+
+    /* Video Source Inspector & Safe Clipboard Copy */
+    let currentInspectedTitle = ``;
+
+    function openVideoSource(videoTitle) {
+      currentInspectedTitle = videoTitle;
+      const catEntry = VIDEO_CATALOG.find(function(v) { return v.title === videoTitle; });
+      const drawer = document.getElementById(`video-inspector-drawer`);
+      const titleEl = document.getElementById(`inspector-video-title`);
+      const sumEl = document.getElementById(`inspector-video-summary`);
+      const prevEl = document.getElementById(`inspector-search-preview`);
+
+      if (titleEl) titleEl.textContent = `YouTube 原片：《${videoTitle}》`;
+      if (sumEl) {
+        sumEl.textContent = catEntry
+          ? `核心要点：${catEntry.concept}。已为你同步高亮策展矩阵中与该视频直接关联的学习方法。`
+          : `来自 Dr. Justin Sung 频道原片逐字稿；已为你同步筛出画布中的对应方法单元。`;
+      }
+      if (prevEl) prevEl.textContent = `检索词: Justin Sung "${videoTitle}"`;
+      if (drawer) drawer.classList.remove(`hidden-panel`);
+
+      appState.activeVideoFilter = videoTitle;
+      const note = document.getElementById(`active-video-filter-note`);
+      const clrBtn = document.getElementById(`clear-video-filter-btn`);
+      if (note) note.textContent = `已按原片溯源过滤：《${videoTitle}》`;
+      if (clrBtn) clrBtn.classList.remove(`hidden-panel`);
+
+      applyMatrixFilters();
+      if (drawer) drawer.scrollIntoView({ behavior: `smooth`, block: `nearest` });
+    }
+
+    function closeVideoInspector() {
+      const drawer = document.getElementById(`video-inspector-drawer`);
+      if (drawer) drawer.classList.add(`hidden-panel`);
+    }
+
+    function copyTextSafely(text, successMsg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
+          showToast(successMsg);
+        }).catch(function() {
+          fallbackCopy(text, successMsg);
+        });
+      } else {
+        fallbackCopy(text, successMsg);
+      }
+    }
+
+    function fallbackCopy(text, successMsg) {
+      const ta = document.createElement(`textarea`);
+      ta.value = text;
+      ta.style.position = `fixed`;
+      ta.style.opacity = `0`;
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand(`copy`);
+        showToast(successMsg);
+      } catch (e) {
+        showToast(`请手动复制：${text}`);
+      }
+      document.body.removeChild(ta);
+    }
+
+    function copyCurrentVideoQuery() {
+      if (!currentInspectedTitle) return;
+      const q = `Justin Sung ${currentInspectedTitle}`;
+      copyTextSafely(q, `已复制 YouTube 搜索词：${q}`);
+    }
+
+    function copyPromptText(elId) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      copyTextSafely(el.textContent, `已复制 Justin Sung 协同指令模板，可直接发给大模型`);
+    }
+
+    /* Earned-Answer Friction Lab */
+    let currentFrictionIdx = 0;
+
+    function selectFrictionScenario(idx) {
+      currentFrictionIdx = idx;
+      [0, 1, 2].forEach(function(i) {
+        const tab = document.getElementById(`fric-tab-${i}`);
+        if (tab) tab.setAttribute(`aria-pressed`, i === idx ? `true` : `false`);
+      });
+
+      const sc = FRICTION_SCENARIOS[idx];
+      const titleEl = document.getElementById(`fric-prompt-title`);
+      const bodyEl = document.getElementById(`fric-prompt-body`);
+      const qEl = document.getElementById(`fric-guiding-q`);
+      const inp = document.getElementById(`fric-user-input`);
+      const outBox = document.getElementById(`fric-unlocked-output`);
+
+      if (titleEl) titleEl.textContent = sc.title;
+      if (bodyEl) bodyEl.textContent = sc.body;
+      if (qEl) qEl.textContent = sc.question;
+      if (inp) inp.value = appState.scenarioNotes[idx] || ``;
+
+      updateFrictionProgress();
+
+      if (appState.unlockedScenarios.indexOf(idx) !== -1) {
+        renderUnlockedScenario(idx);
+      } else if (outBox) {
+        outBox.classList.add(`hidden-panel`);
+      }
+    }
+
+    function updateFrictionProgress() {
+      const inp = document.getElementById(`fric-user-input`);
+      const fill = document.getElementById(`fric-progress-fill`);
+      const status = document.getElementById(`fric-char-status`);
+      const btn = document.getElementById(`fric-unlock-btn`);
+      if (!inp || !fill || !status || !btn) return;
+
+      const len = inp.value.trim().length;
+      const pct = Math.min(100, Math.round((len / 15) * 100));
+      fill.style.width = `${pct}%`;
+      fill.style.backgroundColor = len >= 15 ? `var(--secondary)` : `var(--load-accent)`;
+      status.textContent = len >= 15 ? `已输入 ${len} 字 · 思考阻尼达标，可解锁对比` : `已输入 ${len} / 15 字（需完成最小思考阻尼）`;
+      btn.disabled = len < 15;
+    }
+
+    function renderUnlockedScenario(idx) {
+      const sc = FRICTION_SCENARIOS[idx];
+      const outBox = document.getElementById(`fric-unlocked-output`);
+      const echoEl = document.getElementById(`fric-user-echo`);
+      const trapEl = document.getElementById(`fric-trap-text`);
+      const earnedEl = document.getElementById(`fric-earned-text`);
+
+      if (echoEl) echoEl.textContent = `你的推演记录：${(appState.scenarioNotes[idx] || ``).slice(0, 48)}…`;
+      if (trapEl) trapEl.textContent = sc.trapOut;
+      if (earnedEl) earnedEl.textContent = sc.earnedOut;
+      if (outBox) outBox.classList.remove(`hidden-panel`);
+    }
+
+    function unlockEarnedAnswer() {
+      const inp = document.getElementById(`fric-user-input`);
+      if (!inp || inp.value.trim().length < 15) return;
+
+      appState.scenarioNotes[currentFrictionIdx] = inp.value.trim();
+      if (appState.unlockedScenarios.indexOf(currentFrictionIdx) === -1) {
+        appState.unlockedScenarios.push(currentFrictionIdx);
+        appState.earnedCount += 1;
+      }
+      renderUnlockedScenario(currentFrictionIdx);
+      showToast(`已通过思考阻尼！自主信息加工完成。`);
+      persistState();
+    }
+
+    /* Pillar 1: AI Decision Evaluator */
+    function evaluateAiDecision() {
+      const bypass = document.getElementById(`ai-chk-bypass`);
+      const timeSave = document.getElementById(`ai-chk-timesave`);
+      const risk = document.getElementById(`ai-chk-risk`);
+      const verdictEl = document.getElementById(`ai-eval-verdict`);
+      if (!bypass || !timeSave || !risk || !verdictEl) return;
+
+      const isBypass = bypass.checked;
+      const isTimeSave = timeSave.checked;
+      const isRisk = risk.checked;
+
+      if (isBypass) {
+        verdictEl.innerHTML = `
+          <span class="dossier-pill dossier-pill--trap">红线禁止：切勿交给 AI 代劳</span>
+          <p style="margin:var(--space-xs) 0 0 0; font-size:0.9rem;">该步骤正是锻炼神经元建网与专家直觉的“良性痛苦”所在。一旦外包，你将损失核心认知收益（The gain is only wrought through the pain）。<strong>建议替代：</strong>自己先画出主干草图，再只问 AI 遗漏关键词。</p>
+        `;
+      } else if (isRisk) {
+        verdictEl.innerHTML = `
+          <span class="dossier-pill">黄灯警戒：仅限 AI 充当“反例/事前验尸助理”</span>
+          <p style="margin:var(--space-xs) 0 0 0; font-size:0.9rem;">AI 95% 的准确率在高风险或高度依赖情境的任务中依然致命。最终决策、权衡校验和责任归属必须由你亲自闭环把关。</p>
+        `;
+      } else if (isTimeSave) {
+        verdictEl.innerHTML = `
+          <span class="dossier-pill dossier-pill--secondary">绿灯协同：可放心交由 AI 提效</span>
+          <p style="margin:var(--space-xs) 0 0 0; font-size:0.9rem;">既未跳过核心信息加工，又能大幅节省机械检索时间。请把省下来的时间全力投入 L1–L2 深度框架建构与高阶验证。</p>
+        `;
+      } else {
+        verdictEl.innerHTML = `
+          <span class="dossier-pill">建议自做：省时不够显著，不如顺手保持手感</span>
+          <p style="margin:var(--space-xs) 0 0 0; font-size:0.9rem;">Justin Sung 提出争议性原则：如果 AI 无法为你节省<em>显著</em>时间，宁可自己动手完成，既能保持脑力敏捷，也能维持他人对你的专业信任度。</p>
+        `;
+      }
+    }
+
+    /* Video Directory Table */
+    function filterVideoDirectory(mod) {
+      [`all`, `ai-boundary`, `higher-order`, `ai-workflow`, `focus-life`].forEach(function(m) {
+        const btn = document.getElementById(`vdir-${m}`);
+        if (btn) btn.setAttribute(`aria-pressed`, m === mod ? `true` : `false`);
+      });
+
+      const tbody = document.getElementById(`video-directory-tbody`);
+      const countEl = document.getElementById(`dir-count`);
+      if (!tbody) return;
+
+      const list = VIDEO_CATALOG.filter(function(v) {
+        return mod === `all` || v.module === mod;
+      });
+      if (countEl) countEl.textContent = `当前显示 ${list.length} / ${VIDEO_CATALOG.length} 期核心视频来源`;
+
+      const modMap = {
+        'ai-boundary': `AI 边界与防退化`,
+        'higher-order': `高阶认知与组块`,
+        'ai-workflow': `AI 协同与深阅读`,
+        'focus-life': `节律管理与案例`
+      };
+
+      tbody.innerHTML = list.map(function(v, i) {
+        const safeTitle = v.title.replace(/'/g, `\\'`);
+        const idxStr = String(i + 1).padStart(2, `0`);
+        return `
+          <tr>
+            <td style="font-family:var(--font-label); font-weight:600; color:var(--primary);">${idxStr}</td>
+            <td><span class="dossier-meta">${modMap[v.module] || v.module}</span></td>
+            <td><strong>${v.title}</strong></td>
+            <td style="color:var(--on-surface-variant);">${v.concept}</td>
+            <td>
+              <div style="display:flex; flex-wrap:wrap; gap:var(--space-xs);">
+                <button type="button" class="btn btn--secondary" style="min-height:36px; padding:4px 10px; font-size:0.8rem;" onclick="locateVideoInMatrix('${safeTitle}')">定位方法</button>
+                <button type="button" class="btn" style="min-height:36px; padding:4px 10px; font-size:0.8rem;" onclick="copyTextSafely('Justin Sung ${safeTitle}', '已复制 YouTube 搜索词：Justin Sung ${safeTitle}')">复制片名</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    function locateVideoInMatrix(title) {
+      openVideoSource(title);
+      scrollToSection(`sec-matrix`);
+    }
+
+    /* Reset State (Inline 2-Step Confirmation - no native dialog) */
+    function handleResetState(btn) {
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `再次点击确认清空进度`;
+        setTimeout(function() {
+          btn.dataset.armed = `false`;
+          btn.textContent = `重置实验进度`;
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `重置实验进度`;
+
+      appState = {
+        selectedSymptom: null,
+        layerOrderMode: `sung`,
+        activeLayer: 1,
+        wmFactors: [`核心目的`, `关键因果`, `边界条件`],
+        wmChunked: false,
+        activeVideoFilter: null,
+        earnedCount: 0,
+        unlockedScenarios: [],
+        scenarioNotes: {}
+      };
+
+      [`ai`, `overload`, `anki`, `burnout`].forEach(function(k) {
+        const b = document.getElementById(`sym-${k}`);
+        if (b) b.setAttribute(`aria-pressed`, `false`);
+      });
+      const diagOut = document.getElementById(`diagnostic-result`);
+      if (diagOut) diagOut.innerHTML = `<span class="dossier-meta">等待选择症状 — 点击上方任一选项开启认知处方</span>`;
+
+      setLayerOrderMode(`sung`);
+      renderWmBench();
+      resetMatrixFilters();
+      closeVideoInspector();
+      selectFrictionScenario(0);
+      showToast(`已重置全部实验状态。`);
+      persistState();
+    }
+
+    /* Initialization */
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = Object.assign(appState, saved);
+          }
+        } catch (e) {
+          /* ignore load error */
+        }
+      }
+
+      if (appState.selectedSymptom) {
+        selectSymptom(appState.selectedSymptom);
+      }
+      setLayerOrderMode(appState.layerOrderMode || `sung`);
+      if (appState.activeLayer) inspectLayer(appState.activeLayer);
+      renderWmBench();
+      applyMatrixFilters();
+      selectFrictionScenario(0);
+      evaluateAiDecision();
+      filterVideoDirectory(`all`);
+      updateProgressBadge();
+
+      if (window.lucide) window.lucide.createIcons();
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    if (document.readyState === `loading`) {
+      document.addEventListener(`DOMContentLoaded`, initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
